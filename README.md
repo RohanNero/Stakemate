@@ -8,13 +8,11 @@ Powered by the SSV network
 
 1. ### Stake a collective 32 ETH between all stakers
 
+   - This can be easily accomplished or mimicked for testing purposes, only involves StakingDVT logic.
+
 2. ### Generate your ethereum validator keys along with the deposit_data_root
 
-   - The **DepositData** params you will need to pass to the deposit contract are:
-     1. **bytes calldata** `pubkey` - A BLS12-381 public key
-     2. **bytes calldata** `withdrawal_credentials` - Commitment to a public key for withdrawals.
-     3. **bytes calldata** `signature` - A BLS12-381 signature.
-     4. **bytes32** `deposit_data_root` - The SHA-256 hash of the SSZ-encoded DepositData object. (Used as a protection against malformed input.)
+   -
    - **ssv-awesome** reads from a config file to pass the params
      1. **Command:** `python3 main.py create-keys -c sample_config/validator-config.json`
      2. **Description:** "This option can be used to generate ethereum validator keys and their deposit data"
