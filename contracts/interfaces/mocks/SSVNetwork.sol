@@ -3,7 +3,7 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin-upgradable/contracts/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./utils/VersionedContract.sol";
 import "./utils/Types.sol";
 import "./ISSVNetwork.sol";
@@ -614,6 +614,7 @@ contract SSVNetwork is OwnableUpgradeable, ISSVNetwork, VersionedContract {
     function validatorsPerOperatorCount(uint32 operatorId)
         external
         view
+        override
         returns (uint32)
     {
         return _ssvRegistryContract.validatorsPerOperatorCount(operatorId);
