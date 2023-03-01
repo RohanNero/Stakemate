@@ -11,10 +11,10 @@ Powered by the SSV network
 2. ### Generate your ethereum validator keys along with the deposit_data_root
 
    - The **DepositData** params you will need to pass to the deposit contract are:
-     1. `bytes calldata pubkey` - A BLS12-381 public key
-     2. `bytes calldata withdrawal_credentials` - Commitment to a public key for withdrawals.
-     3. `bytes calldata signature` - A BLS12-381 signature.
-     4. `bytes32 deposit_data_root` - The SHA-256 hash of the SSZ-encoded DepositData object. (Used as a protection against malformed input.)
+     1. **bytes calldata** `pubkey` - A BLS12-381 public key
+     2. **bytes calldata** `withdrawal_credentials` - Commitment to a public key for withdrawals.
+     3. **bytes calldata** `signature` - A BLS12-381 signature.
+     4. **bytes32** `deposit_data_root` - The SHA-256 hash of the SSZ-encoded DepositData object. (Used as a protection against malformed input.)
    - **ssv-awesome** reads from a config file to pass the params
      1. **Command:** `python3 main.py create-keys -c sample_config/validator-config.json`
      2. **Description:** "This option can be used to generate ethereum validator keys and their deposit data"
@@ -34,10 +34,15 @@ Powered by the SSV network
      2. **Description:** "This option can be used to submit validator to stakepool"
 
 5. ### Finally you deposit the key shares
-   -
+   - This should call SSVNetwork's `registerValidator()` function and pass it these params:
+     1. **bytes** `publicKey` - Validator public key.
+     2. **uint32[]** `operatorIds` - Operator public keys.
+     3. **bytes[]** `sharesPublicKeys` - Shares public keys.
+     4. **bytes[]** `sharesEncrypted` - Encrypted private keys.
+     5. **uint256** `amount` - Amount of tokens to deposit.
    - **ssv-awesome** reads from a config file to pass the params
-   1. **Command:** `python3 main.py deposit-keyshares -c sample_config/deposit-validator.json`
-   2. **Description:** "This option can be used to submit validator keyshares to stakepool"
+     1. **Command:** `python3 main.py deposit-keyshares -c sample_config/deposit-validator.json`
+     2. **Description:** "This option can be used to submit validator keyshares to stakepool"
 
 ## Helpful links & sources
 
