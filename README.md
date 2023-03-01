@@ -66,4 +66,5 @@ Powered by the SSV network
 - [keystore EIP](https://github.com/ethereum/EIPs/issues/2339)
 - [ethereum staking CLI](https://github.com/ethereum/staking-deposit-cli)
 - [ETH denver](https://hackathon.ssv.network/#ba1b1f80aedd4932ae7c56a119eac4d0)
-- []()
+- [ssz encoding (`deposit_data_root`)](https://ethereum.org/en/developers/docs/data-structures-and-encoding/ssz/)
+- [BLS12-381 key generation](https://eips.ethereum.org/EIPS/eip-2333)
