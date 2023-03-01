@@ -18,7 +18,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
 
     args = [, depositContract.address, , , , [1, 2, 9, 42]];
   } else {
-    args = [, network.config[chainId].depositContract, , , , [1, 2, 9, 42]];
+    args = [, networkConfig[chainId][depositContract], , , , [1, 2, 9, 42]];
   }
 
   log("args:", args);
