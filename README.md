@@ -21,6 +21,8 @@ Powered by the SSV network
 
 3. ### Next step is to generate the key shares
 
+   -
+
    - **ssv-awesome** reads from a config file to pass the params
 
      1. **Command:** `python3 main.py generate-keyshares -c sample_config/keyshare-config.json`
@@ -30,11 +32,10 @@ Powered by the SSV network
 
    - This should call the Beacon depositContract's `deposit()` function and pass it these params:
 
-     1.
-     2.
-     3.
-     4.
-     5.
+     1. **bytes calldata** `pubkey` - A BLS12-381 public key
+     2. **bytes calldata** `withdrawal_credentials` - Commitment to a public key for withdrawals.
+     3. **bytes calldata** `signature` - A BLS12-381 signature.
+     4. **bytes32** `deposit_data_root` - The SHA-256 hash of the SSZ-encoded DepositData object. (Used as a protection against malformed input.)
 
    - **ssv-awesome** reads from a config file to pass the params
      1. **Command:** `python3 main.py deposit-validators -c sample_config/deposit-validator.json`
