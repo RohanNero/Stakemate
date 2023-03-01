@@ -22,25 +22,36 @@ Powered by the SSV network
 3. ### Next step is to generate the key shares
 
    - **ssv-awesome** reads from a config file to pass the params
+
      1. **Command:** `python3 main.py generate-keyshares -c sample_config/keyshare-config.json`
      2. **Description:** "This option can be used to generate SSV keyshares using ssv cli tool"
 
 4. ### Next you deposit the validator keys
 
-   -
+   - This should call the Beacon depositContract's `deposit()` function and pass it these params:
+
+     1.
+     2.
+     3.
+     4.
+     5.
 
    - **ssv-awesome** reads from a config file to pass the params
      1. **Command:** `python3 main.py deposit-validators -c sample_config/deposit-validator.json`
      2. **Description:** "This option can be used to submit validator to stakepool"
 
 5. ### Finally you deposit the key shares
+
    - This should call SSVNetwork's `registerValidator()` function and pass it these params:
+
      1. **bytes** `publicKey` - Validator public key.
      2. **uint32[]** `operatorIds` - Operator public keys.
      3. **bytes[]** `sharesPublicKeys` - Shares public keys.
      4. **bytes[]** `sharesEncrypted` - Encrypted private keys.
      5. **uint256** `amount` - Amount of tokens to deposit.
+
    - **ssv-awesome** reads from a config file to pass the params
+
      1. **Command:** `python3 main.py deposit-keyshares -c sample_config/deposit-validator.json`
      2. **Description:** "This option can be used to submit validator keyshares to stakepool"
 
