@@ -10,7 +10,7 @@ Powered by the SSV network
 
    - This can be easily accomplished or mimicked for testing purposes, only involves StakingDVT logic.
 
-2. ### Generate your ethereum validator keys along with the deposit_data_root
+2. ### Generate your ethereum validator keys along with the `deposit_data_root`
 
    -
    - **ssv-awesome** reads from a config file to pass the params
