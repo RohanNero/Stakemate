@@ -67,4 +67,6 @@ Powered by the SSV network
 - [ethereum staking CLI](https://github.com/ethereum/staking-deposit-cli)
 - [ETH denver](https://hackathon.ssv.network/#ba1b1f80aedd4932ae7c56a119eac4d0)
 - [ssz encoding (`deposit_data_root`)](https://ethereum.org/en/developers/docs/data-structures-and-encoding/ssz/)
+- [validator key documentation](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/keys/#validator-key)
 - [BLS12-381 key generation](https://eips.ethereum.org/EIPS/eip-2333)
+- []()
