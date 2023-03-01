@@ -9,9 +9,53 @@ require("solidity-coverage");
 require("hardhat-deploy");
 require("chai");
 
+const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
+const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
+const FUJI_RPC_URL = process.env.FUJI_RPC_URL;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+const SNOWTRACE_API_KEY = process.env.SNOWTRACE_API_KEY;
+const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
+
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    compilers: [{ version: "0.6.11" }, { version: "0.8.4" }],
+    compilers: [{ version: "0.8.4" }, { version: "0.6.11" }],
+  },
+  namedAccounts: {
+    deployer: 0,
+  },
+  gasReporter: {
+    enabled: false,
+  },
+  networks: {
+    hardhat: {
+      chainId: 1337,
+    },
+    goerli: {
+      chainId: 5,
+      blockConfirmations: 5,
+      url: GOERLI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+    },
+    mumbai: {
+      chainId: 80001,
+      blockConfirmations: 5,
+      url: MUMBAI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+    },
+    fuji: {
+      chainId: 43113,
+      blockConfirmations: 5,
+      url: FUJI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+    },
+  },
+  etherscan: {
+    apiKey: {
+      goerli: ETHERSCAN_API_KEY,
+      polygonMumbai: POLYGONSCAN_API_KEY,
+      avalancheFujiTestnet: SNOWTRACE_API_KEY,
+    },
   },
 };
