@@ -12,7 +12,15 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
   log("network name:", network.name);
 
   if (developmentChains.includes(network.name)) {
+    // Deposit Contract
     const depositContract = await deploy("DepositContract", {
+      from: deployer,
+      log: true,
+      args: [],
+    });
+
+    // Mock SSVToken
+    const SSVToken = await deploy("SSVTokenMock", {
       from: deployer,
       log: true,
       args: [],

@@ -70,3 +70,5 @@ Powered by the SSV network
 - [validator key documentation](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/keys/#validator-key)
 - [BLS12-381 key generation](https://eips.ethereum.org/EIPS/eip-2333)
 - []()
+
+LEFT OFF RIGHT HERE, TRYING TO DEPLOY ALL THE LOCAL CONTRACTS: SEE AWESOME_SSV'S LOCAL_DEPLOY.PY
