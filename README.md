@@ -26,7 +26,7 @@ Powered by the SSV network
      1. **Command:** `python3 main.py generate-keyshares -c sample_config/keyshare-config.json`
      2. **Description:** "This option can be used to generate SSV keyshares using ssv cli tool"
 
-4. ### Next you deposit the validator keys
+4. ### Then you deposit the validator keys
 
    - This should call the Beacon depositContract's `deposit()` function and pass it these params:
 
