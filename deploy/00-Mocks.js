@@ -26,8 +26,9 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
       args: [],
     });
 
-    // SSVNetwork contract size exceeds size limit (30 KiB)
-    // Might just create a SSVNetworkMock contract for local work
+    /* SSVNetwork contract
+     *size exceeds size limit (30 KiB)
+     * Might just create a SSVNetworkMock contract for local work */
     // const SSVNetwork = await deploy("SSVNetwork", {
     //   from: deployer,
     //   log: true,
