@@ -9,6 +9,7 @@ require("solidity-coverage");
 require("hardhat-deploy");
 require("chai");
 
+const MAINNET_RPC_URL = process.env.MAINNET_RPC_URL;
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
 const FUJI_RPC_URL = process.env.FUJI_RPC_URL;
@@ -49,6 +50,12 @@ module.exports = {
       chainId: 43113,
       blockConfirmations: 5,
       url: FUJI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+    },
+    mainnet: {
+      chainId: 1,
+      blockConfirmations: 3,
+      url: MAINNET_RPC_URL,
       accounts: [PRIVATE_KEY],
     },
   },
