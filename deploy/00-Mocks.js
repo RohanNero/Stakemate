@@ -8,12 +8,12 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
   const { deployer, withdrawalCreds } = await getNamedAccounts();
   const { deploy, log } = deployments;
   const chainId = await getChainId();
-  log("chainId:", chainId);
-  log("network name:", network.name);
-  log("deployer:", deployer);
-  log("withdrawalCreds:", withdrawalCreds);
-  log("operatorIds:", networkConfig[chainId].operatorIds);
-  log("ssvContract:", networkConfig[chainId].ssvNetwork);
+  // log("chainId:", chainId);
+  // log("network name:", network.name);
+  // log("deployer:", deployer);
+  // log("withdrawalCreds:", withdrawalCreds);
+  // log("operatorIds:", networkConfig[chainId].operatorIds);
+  // log("ssvContract:", networkConfig[chainId].ssvNetwork);
 
   if (developmentChains.includes(network.name)) {
     // Deposit Contract
@@ -45,6 +45,13 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
     //   log: true,
     //   args: [],
     //   gasLimit: 5000000,
+    // });
+
+    // Mock SSVETH
+    // const SSVETH = await deploy("SSVETH", {
+    //   from: deployer,
+    //   log: true,
+    //   args: [],
     // });
   }
 };
