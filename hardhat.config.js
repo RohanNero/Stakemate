@@ -24,6 +24,7 @@ module.exports = {
   },
   namedAccounts: {
     deployer: 0,
+    withdrawalCreds: 1, // Set this value to 0 if you wish to use the same address for withdrawals
   },
   gasReporter: {
     enabled: false,

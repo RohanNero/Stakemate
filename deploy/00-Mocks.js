@@ -5,11 +5,15 @@ const {
 } = require("../helper-hardhat-config.js");
 
 module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
-  const { deployer } = await getNamedAccounts();
+  const { deployer, withdrawalCreds } = await getNamedAccounts();
   const { deploy, log } = deployments;
   const chainId = await getChainId();
   log("chainId:", chainId);
   log("network name:", network.name);
+  //log("deployer:", deployer);
+  //log("withdrawalCreds:", withdrawalCreds);
+  const opIds = networkConfig[chainId].operatorIds;
+  log("operatorIds:", opIds);
 
   if (developmentChains.includes(network.name)) {
     // Deposit Contract

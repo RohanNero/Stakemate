@@ -2,7 +2,12 @@ const developmentChains = ["hardhat", "localhost"];
 
 const networkConfig = {
   1337: {
+    name: "hardhat",
+    operatorIds: [1, 2, 9, 42],
+  },
+  31337: {
     name: "localhost",
+    operatorIds: [1, 2, 9, 42],
   },
   5: {
     name: "goerli",
