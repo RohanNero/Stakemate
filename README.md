@@ -5,6 +5,7 @@ Powered by the SSV network
 ### Steps to using SSV
 
 **Notice:** When deploying to a forked chain pass `http://localhost:8545` as the RPC url
+**Notice:** I had to add `override` to the SSVNetwork contract's `validatorsPerOperatorCount()`
 
 1. ### Stake a collective 32 ETH between all stakers
 
