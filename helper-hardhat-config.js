@@ -5,10 +5,13 @@ const networkConfig = {
     name: "hardhat",
     operatorIds: [1, 2, 9, 42],
     ssvNetwork: "0x3D776231fE7EE264c89a9B09647ACFD955cD1d9b",
+    stakeValue: "32010000000000000000", // 32.01 ETH
   },
   31337: {
     name: "localhost",
     operatorIds: [1, 2, 9, 42],
+    ssvNetwork: "0x3D776231fE7EE264c89a9B09647ACFD955cD1d9b",
+    stakeValue: "32010000000000000000", // 32.01 ETH
   },
   5: {
     name: "goerli",

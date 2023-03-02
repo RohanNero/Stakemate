@@ -1,0 +1,43 @@
+{
+  "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "abi": [],
+  "transactionHash": "0xebff15ada39d1b92c724bfd6d4a1e7a1e61a7d5bd3e38013cdf7326e52021d68",
+  "receipt": {
+    "to": null,
+    "from": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "contractAddress": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "transactionIndex": 0,
+    "gasUsed": "67066",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x9e0214c80a458600f13fb745fbdc4a9ebdb353fe3a7aba086520bb80cc082c09",
+    "transactionHash": "0xebff15ada39d1b92c724bfd6d4a1e7a1e61a7d5bd3e38013cdf7326e52021d68",
+    "logs": [],
+    "blockNumber": 3,
+    "cumulativeGasUsed": "67066",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "838418d62feb9b137ea813c8013a37c7",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Rohan Nero\",\"kind\":\"dev\",\"methods\":{},\"title\":\"SSVNetworkMock\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"This contract is less than 30Kib \",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/mocks/SSVNetworkMock.sol\":\"SSVNetworkMock\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/mocks/SSVNetworkMock.sol\":{\"content\":\"//SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n* @title SSVNetworkMock\\n* @author Rohan Nero\\n* @notice This contract is less than 30Kib */\\ncontract SSVNetworkMock {\\n\\n}\",\"keccak256\":\"0xf27024534edc088d6ed4a2cf8760d58a1d8fd45070c11671b6fb7877987357c2\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220cea2cd7c83cdcf015bf1e19c5f4d2d14d697a59848c2194f79b3a91caf937c6a64736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220cea2cd7c83cdcf015bf1e19c5f4d2d14d697a59848c2194f79b3a91caf937c6a64736f6c63430008040033",
+  "devdoc": {
+    "author": "Rohan Nero",
+    "kind": "dev",
+    "methods": {},
+    "title": "SSVNetworkMock",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "This contract is less than 30Kib ",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

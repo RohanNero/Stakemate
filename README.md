@@ -2,6 +2,28 @@
 
 Powered by the SSV network
 
+## How to use
+
+first clone into the repo
+
+`git clone https://github.com/RohanNero/hardhat-dvt-staking`
+
+install the dependencies
+
+`yarn install`
+
+compile the contracts
+
+`yarn hardhat compile`
+
+If you want to use the same validator public key as the withdrawal public key then you need to see the `namedAccounts` section in the `hardhat.config.js` file.
+
+Now input your information into a `.env` file using the `.env.example` file as an example format.
+
+### Deploying locally
+
+Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
+
 ### Steps to using SSV
 
 **Notice:** When deploying to a forked chain pass `http://localhost:8545` as the RPC url
