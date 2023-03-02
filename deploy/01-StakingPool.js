@@ -9,7 +9,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   const { deployer, withdrawalCreds } = await getNamedAccounts();
   const { deploy, log } = deployments;
   const chainId = await getChainId();
-  let depositContract;
+  let depositContract, SSVNetwork, opIds;
   //log("chainId:", chainId);
   //log("network name:", network.name);
 
@@ -22,15 +22,19 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
         uint32[4] memory ids - the SSV operator IDs
    */
   if (developmentChains.includes(network.name)) {
-    depositContract = await ethers.getContract("DepositContract");
-    SSVNetwork = await ethers.getContract("SSVNetwork");
+    const depositContractObject = await ethers.getContract("DepositContract");
+    depositContract = depositContractObject.address;
+    const SSVNetworkObject = await ethers.getContract("SSVNetworkMock");
+    SSVNetwork = SSVNetworkObject.address;
+    const SSVTokenObject = await ethers.getContract("SSVTokenMock");
+    SSVToken = SSVTokenObject.address;
     opIds = networkConfig[chainId].operatorIds;
-
-    //args = [, depositContract.address, , , , [1, 2, 9, 42]];
   } else {
-    depositContract = networkConfig[chainId][depositContract];
-    SSVNetwork = networkConfig[chainId][SSVNetwork];
+    depositContract = networkConfig[chainId].depositContract;
+    SSVNetwork = networkConfig[chainId].SSVNetwork;
+    opIds = networkConfig[chainId].operatorIds;
   }
+
   args = [
     deployer,
     depositContract,
@@ -39,8 +43,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     SSVToken,
     opIds,
   ];
-
-  log("args:", args);
+  //log("args:", args);
 
   const pool = await deploy("StakingPool", {
     from: deployer,
@@ -50,6 +53,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
 
   if (!developmentChains.includes(network.name)) {
     log("Verifying contract...");
+    await verify(pool.address, args);
   }
 };
 

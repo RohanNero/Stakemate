@@ -8,12 +8,12 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
   const { deployer, withdrawalCreds } = await getNamedAccounts();
   const { deploy, log } = deployments;
   const chainId = await getChainId();
-  log("chainId:", chainId);
-  log("network name:", network.name);
-  //log("deployer:", deployer);
-  //log("withdrawalCreds:", withdrawalCreds);
-  const opIds = networkConfig[chainId].operatorIds;
-  log("operatorIds:", opIds);
+  //   log("chainId:", chainId);
+  //   log("network name:", network.name);
+  //   log("deployer:", deployer);
+  //   log("withdrawalCreds:", withdrawalCreds);
+  //   log("operatorIds:", networkConfig[chainId].operatorIds);
+  //   log("ssvContract:", networkConfig[chainId].ssvNetwork);
 
   if (developmentChains.includes(network.name)) {
     // Deposit Contract
@@ -30,9 +30,16 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
       args: [],
     });
 
+    // Mock SSVNetwork
+    const SSVContract = await deploy("SSVNetworkMock", {
+      from: deployer,
+      log: true,
+      args: [],
+    });
+
     /* SSVNetwork contract
      *size exceeds size limit (30 KiB)
-     * Might just create a SSVNetworkMock contract for local work */
+     * creating a SSVNetworkMock contract for local work */
     // const SSVNetwork = await deploy("SSVNetwork", {
     //   from: deployer,
     //   log: true,
