@@ -10,7 +10,6 @@ import "./SSVETH.sol";
 
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
-error StakingPool__OnlyWhitelistedKey(address whitelistKey);
 error StakingPool__EtherCallFailed();
 
 /**
@@ -166,6 +165,15 @@ contract StakingPool is Ownable, ReentrancyGuard {
         uint32[] memory oldIds = operatorIDs;
         operatorIDs = _newOperators;
         emit OperatorIDsChanged(oldIds, _newOperators);
+    }
+
+    function updateValidators(bytes calldata _pubkey,
+        uint32[] calldata _operatorIds,
+        bytes[] calldata _sharesPublicKeys,
+        bytes[] calldata _sharesEncrypted,
+        uint256 _amount
+    ) external onlyOwner() {
+
     }
 
     /**
