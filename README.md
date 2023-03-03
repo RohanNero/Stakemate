@@ -20,6 +20,8 @@ If you want to use the same validator public key as the withdrawal public key th
 
 Now input your information into a `.env` file using the `.env.example` file as an example format.
 
+Once you have set your variables to
+
 ### Deploying locally
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
@@ -82,17 +84,18 @@ Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's 
 - [Goerli SSVToken on etherscan](https://goerli.etherscan.io/address/0x3a9f01091c446bde031e39ea8354647afef091e7)
 - [Goerli SSV faucet](https://faucet.ssv.network/)
 - [Mainnet validator deposit contract](https://etherscan.io/address/0x00000000219ab540356cBB839Cbe05303d7705Fa)
-- [mnemonic wordlist](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md)
+- [Mnemonic wordlist](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md)
 - [vanity ETH](https://vanity-eth.tk/)
 - [SSV Documentation](https://ssv.network/)
 - [Go Ethereum keystore docs](https://goethereumbook.org/keystore/)
 - [keystore EIP](https://github.com/ethereum/EIPs/issues/2339)
-- [ethereum staking CLI](https://github.com/ethereum/staking-deposit-cli)
+- [Ethereum staking CLI](https://github.com/ethereum/staking-deposit-cli)
 - [ETH denver](https://hackathon.ssv.network/#ba1b1f80aedd4932ae7c56a119eac4d0)
-- [ssz encoding (`deposit_data_root`)](https://ethereum.org/en/developers/docs/data-structures-and-encoding/ssz/)
-- [validator key documentation](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/keys/#validator-key)
+- [SSZ encoding (`deposit_data_root`)](https://ethereum.org/en/developers/docs/data-structures-and-encoding/ssz/)
+- [Validator key documentation](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/keys/#validator-key)
 - [BLS12-381 key generation](https://eips.ethereum.org/EIPS/eip-2333)
 - [Goerli Deposit Contract](https://goerli.etherscan.io/address/0xff50ed3d0ec03ac01d4c79aad74928bff48a7b2b)
 - [Mainnet Deposit Contract](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa)
 - [Goerli SSVNetwork](https://goerli.etherscan.io/address/0x3d776231fe7ee264c89a9b09647acfd955cd1d9b)
 - [Hardhat-contract sizer](https://github.com/sc-forks/solidity-coverage/issues/417#issuecomment-730539065)
+- [Example ssv grant proposal](https://docs.google.com/document/d/1ZOPtScnGhrMO3oFbeZMdlxmLdS4JTnup5rydVky9RC0/edit)
