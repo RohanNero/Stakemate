@@ -1,26 +1,20 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract SSVETH is ERC20, Ownable {
-    address public minter;
-    uint256 public sharePrice = 1e18;
+/**
+* @title SSVETH
+* @author Rohan Nero
+* @notice this is the liquid staking pool token issued when you stake with DVTLiquidStakingPool
+ */
+contract SSVETH is ERC20Burnable {
     
-    // ICommon immutable CommonContract;
-    constructor() ERC20("decentralize staking with ssv", "ssvETH"){
-        minter = msg.sender;
+    constructor() ERC20("SecretSharedValidatorEthereum", "SSVETH"){
     }
 
-
-    function mint(address recipient, uint256 amount) external onlyOwner {
-        _mint(recipient, amount);
-    }
-
-    function changeSharePrice(uint256 new_price) external onlyOwner {
-        sharePrice = new_price;
+    function mint(address to, uint amount) public {
+        _mint(to, amount);
     }
 
 }

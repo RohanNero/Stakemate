@@ -11,6 +11,7 @@ import "./SSVETH.sol";
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
 error StakingPool__OnlyWhitelistedKey(address whitelistKey);
+error StakingPool__EtherCallFailed();
 
 /**
 * @title StakingPool
@@ -20,8 +21,6 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
-    uint256 private beaconRewards;
-    uint256 private executionRewards;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
     address public whitelistKey;
     address public withdrawalKey;
@@ -32,10 +31,10 @@ contract StakingPool is Ownable, ReentrancyGuard {
     bytes[] private validators;
     mapping(address => uint256) private userStake;
 
-    event UserStaked(address user_address, uint256 amount);
+    event UserStaked(address indexed user, uint256 indexed amount);
+    event UserUnstaked(address indexed user, uint256 indexed amount);
     event PubKeyDeposited(bytes pubkey);
     event OperatorIDsChanged(uint32[] oldOperators, uint32[] newOperators);
-    event SharePriceUpdated(uint256 newPrice);
     event KeySharesDeposited(
         bytes pubkey,
         bytes[] sharesPublicKeys,
@@ -72,18 +71,19 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
     /** @notice called when the contract receives ETH */
     receive() external payable {
-        updateExecutionRewards(msg.value);
+        ssvETH.mint(msg.sender, msg.value);
+        userStake[msg.sender] += msg.value;
+        emit UserStaked(msg.sender, msg.value);
     }    
 
     /**
-     * @notice Stake tokens
+     * @notice stake tokens
      */
     function stake() public payable {
         if(msg.value == 0) {
             revert StakingPool__CantStakeZeroWei();
         }
-        uint256 amount_minted = (msg.value * ssvETH.sharePrice()) / 1e18;
-        ssvETH.mint(msg.sender, amount_minted);
+        ssvETH.mint(msg.sender, msg.value);
         userStake[msg.sender] += msg.value;
         emit UserStaked(msg.sender, msg.value);
     }
@@ -92,11 +92,14 @@ contract StakingPool is Ownable, ReentrancyGuard {
      * @notice Unstake tokens
      * @param _amount: Amount to be unstaked
      */
-    function unStake(uint256 _amount) public {
-        ssvETH.transferFrom(msg.sender, address(this), _amount);
-        uint256 transferAmount = (_amount / ssvETH.sharePrice()) * 1e18;
-        payable(msg.sender).transfer(transferAmount);
+    function unstake(uint256 _amount) public {
+        ssvETH.burnFrom(msg.sender, _amount);
+        (bool sent, ) = payable(msg.sender).call{value: _amount}("");
+        if(!sent) {
+            revert StakingPool__EtherCallFailed();
+        }
         userStake[msg.sender] = userStake[msg.sender] -= _amount;
+        emit UserUnstaked(msg.sender, _amount);
     }
 
     /**
@@ -120,7 +123,6 @@ contract StakingPool is Ownable, ReentrancyGuard {
             _signature,
             _deposit_data_root
         );
-        // Emit an event to log the deposit of the public key
         emit PubKeyDeposited(_pubkey);
     }
 
@@ -154,23 +156,6 @@ contract StakingPool is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice update execution rewards
-     * @param _newExecutionRewards:  Execution rewards amount added
-     */
-    function updateExecutionRewards(uint256 _newExecutionRewards) internal onlyOwner {
-        executionRewards += _newExecutionRewards;
-    }
-
-    /**
-     * @dev Update share price of the staking pool
-     * @param _newSharePrice: The new share price amount
-     */
-    function updateSharePrice(uint256 _newSharePrice) internal onlyOwner {
-        ssvETH.changeSharePrice(_newSharePrice);
-        emit SharePriceUpdated(_newSharePrice);
-    }
-
-    /**
      * @dev Update operators
      * @param _newOperators: Array of the the new operators Ids
      */
@@ -181,18 +166,6 @@ contract StakingPool is Ownable, ReentrancyGuard {
         uint32[] memory oldIds = operatorIDs;
         operatorIDs = _newOperators;
         emit OperatorIDsChanged(oldIds, _newOperators);
-    }
-
-    /**
-     * @dev Update share price of the staking pool
-     * @param _newBeaconRewards: The new beacon rewards amount
-     */
-    function updateBeaconRewards(uint256 _newBeaconRewards) external onlyOwner {
-        beaconRewards = _newBeaconRewards;
-        uint256 _newSharePrice = (beaconRewards +
-            executionRewards +
-            (validators.length * 32)) / (validators.length * 32);
-        updateSharePrice(_newSharePrice);
     }
 
     /**
@@ -216,13 +189,6 @@ contract StakingPool is Ownable, ReentrancyGuard {
         return userStake[_userAddress];
     }
 
-    /**
-     * @notice returns SSVETH share price
-     */
-    function viewShareprice() public view returns (uint256) {
-        uint256 _sharePrice = ssvETH.sharePrice();
-        return _sharePrice;
-    }
 
     
 

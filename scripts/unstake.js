@@ -25,7 +25,7 @@ async function unStake() {
   //console.log("SSVETHBalance:", SSVETHBalance.toString());
 
   await SSVETH.approve(StakingPool.address, SSVETHBalance);
-  await StakingPool.unStake(userStake);
+  await StakingPool.unstake(userStake);
   console.log("Successfully unStaked", userStake.toString(), "WEI!");
 
   const stillStaked = await StakingPool.viewUserStake(deployer);
