@@ -43,6 +43,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     from: deployer,
     log: true,
     args: args,
+    waitConfirmations: networkConfig[chainId].blockConfirmations,
   });
 
   if (!developmentChains.includes(network.name)) {
