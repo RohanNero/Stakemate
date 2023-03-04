@@ -12,6 +12,12 @@ const networkConfig = {
     operatorIds: [1, 2, 9, 42],
     ssvNetwork: "0x3D776231fE7EE264c89a9B09647ACFD955cD1d9b",
     stakeValue: "32010000000000000000", // 32.01 ETH
+    networkInitialization: {
+      minimumBlocksBeforeLiquidation: "1",
+      operatorMaxFeeIncrease: "3",
+      declareOperatorFeePeriod: "3",
+      executeOperatorFeePeriod: "7",
+    },
   },
   5: {
     name: "goerli",

@@ -176,7 +176,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         bytes[] calldata _sharesEncrypted,
         uint256 _amount
     ) external onlyOwner {
-
+        network.updateValidator(_pubkey, _operatorIds, _sharesPublicKeys, _sharesEncrypted, _amount);
     }
 
     /**
