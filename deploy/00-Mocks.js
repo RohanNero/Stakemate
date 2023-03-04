@@ -37,7 +37,8 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
       args: [],
     });
 
-    // Mock SSVNetwork
+    /* Mock SSVNetwork
+     * depreciated but left in incase you wish to use Mock instead*/
     // const SSVNetwork = await deploy("SSVNetworkMock", {
     //   from: deployer,
     //   log: true,
