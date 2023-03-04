@@ -24,7 +24,7 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
     });
 
     // Mock SSVToken
-    const SSVToken = await deploy("SSVTokenMock", {
+    const SSVToken = await deploy("SSVToken", {
       from: deployer,
       log: true,
       args: [],

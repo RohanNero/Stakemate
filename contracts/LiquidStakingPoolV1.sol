@@ -5,8 +5,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IDepositContract.sol";
+import "./mocks/SSVToken.sol";
 import "./interfaces/ISSVNetwork.sol";
 import "./SSVETH.sol";
+
 
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
@@ -20,9 +22,9 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
+    SSVToken private token;
+    ISSVNetwork private network;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
-    address public SSVTokenAddress;
-    address public SSVNetworkAddress;
 
     uint32[] private operatorIDs;
     bytes[] private validators;
@@ -52,8 +54,8 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         DepositContract = IDepositContract(depositAddress);
         SSVETH _ssvETH = new SSVETH();
         ssvETH = SSVETH(address(_ssvETH));
-        SSVNetworkAddress = ssvNetwork;
-        SSVTokenAddress = ssvToken;
+        token = SSVToken(ssvToken);
+        network = ISSVNetwork(ssvNetwork);
         if(ids.length < 4) {
             revert StakingPool__AtleastFourOperators(ids.length);
         }
@@ -100,7 +102,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
      * @param operatorAddr Operator's ethereum address that can collect fees
      * @param fee The fee which the operator charges for each block. */
     function registerOperator(string memory name, address operatorAddr, uint fee) public onlyOwner returns(uint operatorId) {
-        
+
     }
 
     /**
@@ -143,9 +145,9 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         uint256 _amount
     ) external onlyOwner {
         // Approve the transfer of tokens to the SSV contract
-        IERC20(SSVTokenAddress).approve(SSVNetworkAddress, _amount);
+        token.approve(address(network), _amount);
         // Register the validator and deposit the shares
-        ISSVNetwork(SSVNetworkAddress).registerValidator(
+        network.registerValidator(
             _pubkey,
             _operatorIds,
             _sharesPublicKeys,

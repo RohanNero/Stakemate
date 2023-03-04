@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: MIT
+
 pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -8,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 /**
  * @title Mock SSV Token
  */
-contract SSVTokenMock is Ownable, ERC20, ERC20Burnable {
+contract SSVToken is Ownable, ERC20, ERC20Burnable {
     constructor() ERC20("SSV Token", "SSV") {
     }
 

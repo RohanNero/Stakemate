@@ -26,7 +26,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     depositContract = depositContractObject.address;
     const SSVNetworkObject = await ethers.getContract("SSVNetwork");
     SSVNetwork = SSVNetworkObject.address;
-    const SSVTokenObject = await ethers.getContract("SSVTokenMock");
+    const SSVTokenObject = await ethers.getContract("SSVToken");
     SSVToken = SSVTokenObject.address;
     opIds = networkConfig[chainId].operatorIds;
   } else {
