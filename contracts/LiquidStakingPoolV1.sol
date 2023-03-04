@@ -16,13 +16,11 @@ error StakingPool__EtherCallFailed();
 * @title StakingPool
 * @author Rohan Nero
 * @notice this contract allows multiple users to activate a validator and split the key into SSV keyshares */
-contract StakingPool is Ownable, ReentrancyGuard {
+contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
-    bytes public publicKey;
-    address public withdrawalKey;
     address public SSVTokenAddress;
     address public SSVNetworkAddress;
 
@@ -41,22 +39,16 @@ contract StakingPool is Ownable, ReentrancyGuard {
     );
 
     /**
-        * @param _whitelistKey the validator public key
         * @param depositAddress the beacon chain's deposit contract
-        * @param _withdrawalKey the validator public withdrawal key
         * @param ssvNetwork the SSVNetwork contract address
         * @param ssvToken the SSVToken contract address
         * @param ids the SSV operatorIds you've selected */
     constructor(
-        address _whitelistKey,
         address depositAddress,
-        address _withdrawalKey,
         address ssvNetwork,
         address ssvToken,
         uint32[] memory ids
     ) {
-        withdrawalKey = _withdrawalKey;
-        whitelistKey = _whitelistKey;
         DepositContract = IDepositContract(depositAddress);
         SSVETH _ssvETH = new SSVETH();
         ssvETH = SSVETH(address(_ssvETH));
@@ -108,7 +100,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
      * @param operatorAddr Operator's ethereum address that can collect fees
      * @param fee The fee which the operator charges for each block. */
     function registerOperator(string memory name, address operatorAddr, uint fee) public onlyOwner returns(uint operatorId) {
-
+        
     }
 
     /**

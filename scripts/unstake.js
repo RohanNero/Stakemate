@@ -11,7 +11,7 @@ async function unStake() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log(stakeValue);
   //console.log(deployer);
-  const StakingPool = await ethers.getContract("StakingPool");
+  const StakingPool = await ethers.getContract("StakingPoolV1");
   const StakingPoolssvEthAddress = await StakingPool.ssvETH();
   //console.log("ssvEth:", StakingPoolssvEthAddress);
   const SSVETH = await ethers.getContractAt(

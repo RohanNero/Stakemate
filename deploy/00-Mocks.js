@@ -31,21 +31,20 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
     });
 
     // Mock SSVNetwork
-    const SSVContract = await deploy("SSVNetworkMock", {
-      from: deployer,
-      log: true,
-      args: [],
-    });
+    // const SSVNetwork = await deploy("SSVNetworkMock", {
+    //   from: deployer,
+    //   log: true,
+    //   args: [],
+    // });
 
     /* SSVNetwork contract
      *size exceeds size limit (30 KiB)
      * creating a SSVNetworkMock contract for local work */
-    // const SSVNetwork = await deploy("SSVNetwork", {
-    //   from: deployer,
-    //   log: true,
-    //   args: [],
-    //   gasLimit: 5000000,
-    // });
+    const SSVNetwork = await deploy("SSVNetwork", {
+      from: deployer,
+      log: true,
+      args: [],
+    });
 
     // Mock SSVETH
     // const SSVETH = await deploy("SSVETH", {

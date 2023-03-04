@@ -11,7 +11,7 @@ async function stake() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
-  const StakingPool = await ethers.getContract("StakingPool");
+  const StakingPool = await ethers.getContract("StakingPoolV1");
   await StakingPool.stake({ value: stakeValue });
   console.log("Successfully staked", stakeValue, "WEI!");
   const totalStaked = await StakingPool.viewUserStake(deployer);

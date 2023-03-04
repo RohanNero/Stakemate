@@ -24,7 +24,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   if (developmentChains.includes(network.name)) {
     const depositContractObject = await ethers.getContract("DepositContract");
     depositContract = depositContractObject.address;
-    const SSVNetworkObject = await ethers.getContract("SSVNetworkMock");
+    const SSVNetworkObject = await ethers.getContract("SSVNetwork");
     SSVNetwork = SSVNetworkObject.address;
     const SSVTokenObject = await ethers.getContract("SSVTokenMock");
     SSVToken = SSVTokenObject.address;
@@ -32,20 +32,14 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   } else {
     depositContract = networkConfig[chainId].depositContract;
     SSVNetwork = networkConfig[chainId].SSVNetwork;
+    SSVToken = networkConfig[chainId].SSVToken;
     opIds = networkConfig[chainId].operatorIds;
   }
 
-  args = [
-    deployer,
-    depositContract,
-    withdrawalCreds,
-    SSVNetwork,
-    SSVToken,
-    opIds,
-  ];
+  args = [depositContract, SSVNetwork, SSVToken, opIds];
   //log("args:", args);
 
-  const pool = await deploy("StakingPool", {
+  const pool = await deploy("LiquidStakingPoolV1", {
     from: deployer,
     log: true,
     args: args,
@@ -57,4 +51,4 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   }
 };
 
-module.exports.tags = ["all", "main", "pool"];
+module.exports.tags = ["all", "main", "lpool"];
