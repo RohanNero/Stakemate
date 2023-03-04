@@ -20,25 +20,24 @@ error StakingPool__InvalidPublicKeyLength(uint publicKeyLength);
 /**
 * @title StakingPool
 * @author Rohan Nero
-* @notice this contract allows multiple users to activate a validator and split the key into SSV keyshares */
+* @notice this contract allows multiple users to activate a validator and split the key into SSV keyshares
+* @dev this contract issues a staking token called SSVETH upon calling `stake()` */
 contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
     IERC20 private token;
     ISSVNetwork private network;
-    uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
-
+    uint72 private constant VALIDATOR_AMOUNT = 32 * 1e18;
     uint32[] private operatorIds;
     bytes[] private validators;
     mapping(address => uint256) private userStake;
 
     event UserStaked(address indexed user, uint256 indexed amount);
     event UserUnstaked(address indexed user, uint256 indexed amount);
-    event PubKeyDeposited(bytes pubkey);
-    //event operatorIdsChanged(uint32[] oldOperators, uint32[] newOperators);
-    event OperatorAdded(uint32 operatorId, uint operatorIdsIndex);
-    event OperatorRemoved(uint32 operatorId);
+    event PublicKeyDeposited(bytes indexed pubkey);
+    event OperatorAdded(uint32 indexed operatorId, uint operatorIdsIndex);
+    event OperatorRemoved(uint32 indexed operatorId);
     event KeySharesDeposited(
         bytes indexed pubkey,
         bytes[] indexed sharesPublicKeys,
@@ -46,37 +45,37 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         uint256 amount
     );
 
-    /**
-        * @param depositAddress the beacon chain's deposit contract
-        * @param ssvNetwork the ISSVNetwork contract address (interface)
-        * @param ssvToken the SSVToken contract address
-        * @param ids the SSV operatorIds you've selected */
+    /**@notice sets contract addresses and operatorIds 
+     * @param depositAddress the beacon chain's deposit contract
+     * @param ssvNetwork the ISSVNetwork contract address (interface)
+     * @param ssvToken the SSVToken contract address
+     * @param _operatorIds the SSV operatorIds you've selected */
     constructor(
         address depositAddress,
         address ssvNetwork,
         address ssvToken,
-        uint32[] memory ids
+        uint32[] memory _operatorIds
     ) {
         DepositContract = IDepositContract(depositAddress);
         SSVETH _ssvETH = new SSVETH();
         ssvETH = SSVETH(address(_ssvETH));
         token = IERC20(ssvToken);
         network = ISSVNetwork(ssvNetwork);
-        if(ids.length < 4) {
-            revert StakingPool__AtleastFourOperators(ids.length);
+        if(_operatorIds.length < 4) {
+            revert StakingPool__AtleastFourOperators(_operatorIds.length);
         }
-        operatorIds = ids;
+        operatorIds = _operatorIds;
     }
 
-    /** @notice called when the contract receives ETH */
+    /**@notice called when the contract receives ETH 
+     */
     receive() external payable {
         ssvETH.mint(msg.sender, msg.value);
         userStake[msg.sender] += msg.value;
         emit UserStaked(msg.sender, msg.value);
     }    
 
-    /**
-     * @notice stake tokens
+    /**@notice stake tokens
      */
     function stake() public payable nonReentrant {
         if(msg.value == 0) {
@@ -87,8 +86,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         emit UserStaked(msg.sender, msg.value);
     }
 
-    /**
-     * @notice Unstake tokens
+    /**@notice Unstake tokens
      * @param _amount: Amount to be unstaked
      */
     function unstake(uint256 _amount) public nonReentrant {
@@ -101,28 +99,29 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         emit UserUnstaked(msg.sender, _amount);
     }
 
-    /**
-     * @notice Deposit a validator to the deposit contract
+    /**@notice Deposit a validator to the deposit contract
      * @dev these params together are known as the DepositData
-     * @param _pubkey: Public key of the validator
+     * @param publicKey: Public key of the validator
      * @param _withdrawal_credentials: Withdrawal public key of the validator
      * @param _signature: BLS12-381 signature of the deposit data
      * @param _deposit_data_root: The SHA-256 hash of the SSZ-encoded DepositData object
      */
     function depositValidator(
-        bytes calldata _pubkey,
+        bytes calldata publicKey,
         bytes calldata _withdrawal_credentials,
         bytes calldata _signature,
         bytes32 _deposit_data_root
     ) external onlyOwner {
-        // Deposit the validator to the deposit contract
+        if (publicKey.length != 48) {
+            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+        }
         DepositContract.deposit{value: VALIDATOR_AMOUNT}(
-            _pubkey,
+            publicKey,
             _withdrawal_credentials,
             _signature,
             _deposit_data_root
         );
-        emit PubKeyDeposited(_pubkey);
+        emit PublicKeyDeposited(publicKey);
     }
 
     /**@notice allows owner to submit validator keys and operator keys to SSVNetwork
@@ -164,19 +163,6 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         validators.push(publicKey);
         emit KeySharesDeposited(publicKey, sharesPublicKeys,_operatorIds, amount);
     }
-
-    /**@notice 
-     * @dev Update operators
-     * @param _newOperators: Array of the the new operators Ids
-     */
-    // function updateOperators(uint32[] memory _newOperators) public onlyOwner {
-    //     if(_newOperators.length < 4) {
-    //         revert StakingPool__AtleastFourOperators(_newOperators.length);
-    //     }
-    //     uint32[] memory oldIds = operatorIds;
-    //     operatorIds = _newOperators;
-    //     emit operatorIdsChanged(oldIds, _newOperators);
-    // }
 
     /**@notice allows the owner to add operators to the operatorIds array
      * @param  operatorId the operatorId assigned by SSV */
@@ -240,9 +226,4 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     function viewUserStake(address _userAddress) public view returns (uint256) {
         return userStake[_userAddress];
     }
-
-
-    
-
-    
 }
