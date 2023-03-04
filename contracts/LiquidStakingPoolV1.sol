@@ -16,6 +16,7 @@ error LiquidStakingPool__OperatorIdAlreadyAdded(uint32 operatorId, uint index);
 error LiquidStakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKeys, uint encryptedKeys);
 error LiquidStakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
 error LiquidStakingPool__InvalidPublicKeyLength(uint publicKeyLength);
+error LiquidStakingPool__InsufficientEtherBalance(uint requiredBalance, uint currentBalance);
 
 /**
 * @title StakingPool
@@ -25,7 +26,7 @@ error LiquidStakingPool__InvalidPublicKeyLength(uint publicKeyLength);
 contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
-    SSVETH public ssvETH;
+    SSVETH private ssvETH;
     IERC20 private token;
     ISSVNetwork private network;
     uint72 private constant VALIDATOR_AMOUNT = 32 * 1e18;
@@ -42,7 +43,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         bytes indexed pubkey,
         bytes[] indexed sharesPublicKeys,
         uint32[] indexed operatorIds,
-        uint256 amount
+        uint256 SSVamount
     );
 
     /**@notice sets contract addresses and operatorIds 
@@ -74,6 +75,10 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         userStake[msg.sender] += msg.value;
         emit UserStaked(msg.sender, msg.value);
     }    
+
+
+    /** Main functions */
+
 
     /**@notice stake tokens
      */
@@ -112,6 +117,9 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         bytes calldata _signature,
         bytes32 _deposit_data_root
     ) external onlyOwner {
+        if(address(this).balance < VALIDATOR_AMOUNT) {
+            revert LiquidStakingPool__InsufficientEtherBalance(VALIDATOR_AMOUNT ,address(this).balance);
+        }
         if (publicKey.length != 48) {
             revert LiquidStakingPool__InvalidPublicKeyLength(publicKey.length);
         }
@@ -209,21 +217,58 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         network.updateValidator(publicKey, _operatorIds, sharesPublicKeys, sharesEncrypted, amount);
     }
 
-    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
-     */
-    function viewOperators() public view returns (uint32[] memory) {
-        return operatorIds;
-    }
 
-    /**@notice returns the Validators array
+    /** View / Pure functions */
+
+
+    /**@notice returns current address of the deposit contract 
      */
-    function viewValidators() public view returns (bytes[] memory) {
-        return validators;
+    function viewDepositContractAddress() public view returns (address depositContract) {
+        depositContract = address(DepositContract);
     }
     
+    /**@notice returns the current liquid staking token address
+      */
+    function viewSSVETHAddress() public view returns(address ssvEth) {
+        ssvEth = address(ssvETH);
+    }
+
+    /**@notice returns the current SSVToken contract address 
+     */
+    function viewSSVTokenAddress() public view returns (address ssvToken) {
+        ssvToken = address(token);
+    }
+
+    /**@notice returns the current SSVNetwork contract address
+      */
+    function viewSSVNetworkAddress() public view returns(address ssvNetwork) {
+        ssvNetwork = address(network);
+    }
+
+    /**@notice returns the amount required to activate a validator in wei
+      *@dev this is the uint72 VALIDATOR_AMOUNT variable which was initialized in the constructor 
+      */
+    function viewValidatorAmount() public pure returns(uint72 validatorAmount) {
+        validatorAmount = VALIDATOR_AMOUNT;
+    }
+
+    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
+     */
+    function viewOperators() public view returns (uint32[] memory operatorArray) {
+        operatorArray = operatorIds;
+    }
+
+    /**@notice returns the list of validator public keys activated by this contract
+      *@dev returns the Validators array
+     */
+    function viewValidators() public view returns (bytes[] memory validatorArray) {
+        validatorArray = validators;
+    }
+
     /**@notice returns user's staked amount
      */
-    function viewUserStake(address _userAddress) public view returns (uint256) {
-        return userStake[_userAddress];
+    function viewUserStake(address _userAddress) public view returns (uint256 usersStake) {
+        usersStake = userStake[_userAddress];
     }
+
 }

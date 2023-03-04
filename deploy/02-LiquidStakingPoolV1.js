@@ -13,7 +13,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   //log("chainId:", chainId);
   //log("network name:", network.name);
 
-  /* StakingPool takes 6 parameters:
+  /* LiquidStakingPool takes 6 parameters:
         address keyGenerator - your public key (gets special whitelist permissions)      
         address depositAddress - the `DepositContract` address 
         address withdrawal - public key used for withdrawals

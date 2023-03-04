@@ -15,6 +15,7 @@ error StakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKey
 error StakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
 error StakingPool__InvalidPublicKeyLength(uint publicKeyLength);
 error StakingPool__NotEnoughStaked(uint amountStaked ,uint amount);
+error StakingPool__InsufficientEtherBalance(uint requiredBalance, uint currentBalance);
 
 /**
 * @title StakingPool
@@ -70,6 +71,10 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
         emit UserStaked(msg.sender, msg.value);
     }    
 
+
+    /** Main functions */
+
+
     /**@notice stake tokens
      */
     function stake() public payable nonReentrant {
@@ -108,6 +113,9 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
         bytes calldata _signature,
         bytes32 _deposit_data_root
     ) external onlyOwner {
+        if(address(this).balance < VALIDATOR_AMOUNT) {
+            revert StakingPool__InsufficientEtherBalance(VALIDATOR_AMOUNT ,address(this).balance);
+        }
         if (publicKey.length != 48) {
             revert StakingPool__InvalidPublicKeyLength(publicKey.length);
         }
@@ -205,21 +213,52 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
         network.updateValidator(publicKey, _operatorIds, sharesPublicKeys, sharesEncrypted, amount);
     }
 
-    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
+
+    /** View / Pure functions */
+
+
+    /**@notice returns current address of the deposit contract 
      */
-    function viewOperators() public view returns (uint32[] memory) {
-        return operatorIds;
+    function viewDepositContractAddress() public view returns (address depositContract) {
+        depositContract = address(DepositContract);
     }
 
-    /**@notice returns the Validators array
+    /**@notice returns the current SSVToken contract address 
      */
-    function viewValidators() public view returns (bytes[] memory) {
-        return validators;
+    function viewSSVTokenAddress() public view returns (address ssvToken) {
+        ssvToken = address(token);
     }
-    
+
+    /**@notice returns the current SSVNetwork contract address
+      */
+    function viewSSVNetworkAddress() public view returns(address ssvNetwork) {
+        ssvNetwork = address(network);
+    }
+
+    /**@notice returns the amount required to activate a validator in wei
+      *@dev this is the uint72 VALIDATOR_AMOUNT variable which was initialized in the constructor 
+      */
+    function viewValidatorAmount() public pure returns(uint72 validatorAmount) {
+        validatorAmount = VALIDATOR_AMOUNT;
+    }
+
+    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
+     */
+    function viewOperators() public view returns (uint32[] memory operatorArray) {
+        operatorArray = operatorIds;
+    }
+
+    /**@notice returns the list of validator public keys activated by this contract
+      *@dev returns the Validators array
+     */
+    function viewValidators() public view returns (bytes[] memory validatorArray) {
+        validatorArray = validators;
+    }
+
     /**@notice returns user's staked amount
      */
-    function viewUserStake(address _userAddress) public view returns (uint256) {
-        return userStake[_userAddress];
+    function viewUserStake(address _userAddress) public view returns (uint256 usersStake) {
+        usersStake = userStake[_userAddress];
     }
+
 }
