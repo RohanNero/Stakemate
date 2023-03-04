@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IDepositContract.sol";
-import "./mocks/SSVToken.sol";
 import "./interfaces/ISSVNetwork.sol";
 import "./SSVETH.sol";
 
@@ -22,7 +21,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
-    SSVToken private token;
+    IERC20 private token;
     ISSVNetwork private network;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
 
@@ -42,7 +41,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
 
     /**
         * @param depositAddress the beacon chain's deposit contract
-        * @param ssvNetwork the SSVNetwork contract address
+        * @param ssvNetwork the ISSVNetwork contract address (interface)
         * @param ssvToken the SSVToken contract address
         * @param ids the SSV operatorIds you've selected */
     constructor(
@@ -54,7 +53,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         DepositContract = IDepositContract(depositAddress);
         SSVETH _ssvETH = new SSVETH();
         ssvETH = SSVETH(address(_ssvETH));
-        token = SSVToken(ssvToken);
+        token = IERC20(ssvToken);
         network = ISSVNetwork(ssvNetwork);
         if(ids.length < 4) {
             revert StakingPool__AtleastFourOperators(ids.length);
