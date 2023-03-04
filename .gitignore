@@ -1,0 +1,9 @@
+node_modules
+artifacts
+cache
+.env
+yarn.lock
+yarn-error.log
+notes.md
+bugs.md
+deployments/*

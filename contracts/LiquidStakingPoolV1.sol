@@ -12,6 +12,10 @@ import "./SSVETH.sol";
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
 error StakingPool__EtherCallFailed();
+error StakingPool__OperatorIdAlreadyAdded(uint32 operatorId, uint index);
+error StakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKeys, uint encryptedKeys);
+error StakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
+error StakingPool__InvalidPublicKeyLength(uint publicKeyLength);
 
 /**
 * @title StakingPool
@@ -25,17 +29,20 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     ISSVNetwork private network;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
 
-    uint32[] private operatorIDs;
+    uint32[] private operatorIds;
     bytes[] private validators;
     mapping(address => uint256) private userStake;
 
     event UserStaked(address indexed user, uint256 indexed amount);
     event UserUnstaked(address indexed user, uint256 indexed amount);
     event PubKeyDeposited(bytes pubkey);
-    event OperatorIDsChanged(uint32[] oldOperators, uint32[] newOperators);
+    //event operatorIdsChanged(uint32[] oldOperators, uint32[] newOperators);
+    event OperatorAdded(uint32 operatorId, uint operatorIdsIndex);
+    event OperatorRemoved(uint32 operatorId);
     event KeySharesDeposited(
-        bytes pubkey,
-        bytes[] sharesPublicKeys,
+        bytes indexed pubkey,
+        bytes[] indexed sharesPublicKeys,
+        uint32[] indexed operatorIds,
         uint256 amount
     );
 
@@ -58,7 +65,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         if(ids.length < 4) {
             revert StakingPool__AtleastFourOperators(ids.length);
         }
-        operatorIDs = ids;
+        operatorIds = ids;
     }
 
     /** @notice called when the contract receives ETH */
@@ -94,16 +101,6 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         emit UserUnstaked(msg.sender, _amount);
     }
 
-    /** 
-     * @notice BUG FOUND INSIDE SSV CONTRACTS, I HAVE EMAILED SSVNETWORK ABOUT THIS. AWAITING RESPONSE
-     * @dev calls SSVNetwork which calls SSVRegistry to register operator
-     * @param name Operator's display name
-     * @param operatorAddr Operator's ethereum address that can collect fees
-     * @param fee The fee which the operator charges for each block. */
-    function registerOperator(string memory name, address operatorAddr, uint fee) public onlyOwner returns(uint operatorId) {
-
-    }
-
     /**
      * @notice Deposit a validator to the deposit contract
      * @dev these params together are known as the DepositData
@@ -128,73 +125,117 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         emit PubKeyDeposited(_pubkey);
     }
 
-    /**
-     * @notice Deposit shares for a validator
-     * @param _pubkey: Public key of the validator
+    /**@notice allows owner to submit validator keys and operator keys to SSVNetwork
+     * @dev Deposit shares for a validator
+     * @param publicKey: Public key of the validator
      * @param _operatorIds: IDs of the validator's operators
-     * @param _sharesPublicKeys: Public keys of the shares
-     * @param _sharesEncrypted: Encrypted shares
-     * @param _amount: Amount of tokens to be deposited
+     * @param sharesPublicKeys: Public keys of the shares
+     * @param encryptedKeys: Encrypted private keys
+     * @param amount: Amount of tokens to be deposited
      */
     function depositShares(
-        bytes calldata _pubkey,
+        bytes calldata publicKey,
         uint32[] calldata _operatorIds,
-        bytes[] calldata _sharesPublicKeys,
-        bytes[] calldata _sharesEncrypted,
-        uint256 _amount
+        bytes[] calldata sharesPublicKeys,
+        bytes[] calldata encryptedKeys,
+        uint256 amount
     ) external onlyOwner {
-        // Approve the transfer of tokens to the SSV contract
-        token.approve(address(network), _amount);
-        // Register the validator and deposit the shares
+        if (publicKey.length != 48) {
+            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+        }
+        if (_operatorIds.length < 4 ) {
+            revert StakingPool__AtleastFourOperators(_operatorIds.length);
+        }
+        if (
+            _operatorIds.length != sharesPublicKeys.length ||
+            _operatorIds.length != encryptedKeys.length
+            
+        ) {
+            revert StakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
+        }
+        token.approve(address(network), amount);
         network.registerValidator(
-            _pubkey,
+            publicKey,
             _operatorIds,
-            _sharesPublicKeys,
-            _sharesEncrypted,
-            _amount
+            sharesPublicKeys,
+            encryptedKeys,
+            amount
         );
-        validators.push(_pubkey);
-        emit KeySharesDeposited(_pubkey, _sharesPublicKeys, _amount);
+        validators.push(publicKey);
+        emit KeySharesDeposited(publicKey, sharesPublicKeys,_operatorIds, amount);
     }
 
-    /**
+    /**@notice 
      * @dev Update operators
      * @param _newOperators: Array of the the new operators Ids
      */
-    function updateOperators(uint32[] memory _newOperators) public onlyOwner {
-        if(_newOperators.length < 4) {
-            revert StakingPool__AtleastFourOperators(_newOperators.length);
+    // function updateOperators(uint32[] memory _newOperators) public onlyOwner {
+    //     if(_newOperators.length < 4) {
+    //         revert StakingPool__AtleastFourOperators(_newOperators.length);
+    //     }
+    //     uint32[] memory oldIds = operatorIds;
+    //     operatorIds = _newOperators;
+    //     emit operatorIdsChanged(oldIds, _newOperators);
+    // }
+
+    /**@notice allows the owner to add operators to the operatorIds array
+     * @param  operatorId the operatorId assigned by SSV */
+    function addOperator(uint32 operatorId) public onlyOwner {
+        for(uint i; i < operatorIds.length; i++) {
+            if(operatorIds[i] == operatorId) {
+                revert StakingPool__OperatorIdAlreadyAdded(operatorId, i);
+            }
         }
-        uint32[] memory oldIds = operatorIDs;
-        operatorIDs = _newOperators;
-        emit OperatorIDsChanged(oldIds, _newOperators);
+        operatorIds.push(operatorId);
+        emit OperatorAdded(operatorId, operatorIds.length -1);
     }
 
-    function updateValidators(bytes calldata _pubkey,
+    /**@notice allows owner to remove operators from the operatorIds array 
+     * @param operatorIndex operatorIds array index of the Id to be removed */
+    function removeOperator(uint32 operatorIndex) public onlyOwner {
+        uint32 operatorId = operatorIds[operatorIndex];
+        if(operatorIndex >= operatorIds.length) {
+            revert StakingPool__InvalidOperatorIndex(operatorIds.length, operatorIndex);
+        }
+        if(operatorIds.length - 1 == operatorIndex) {
+            operatorIds.pop;
+        } else {
+            operatorIds[operatorIndex] = operatorIds[operatorIds.length - 1];
+            operatorIds.pop;
+        }
+        emit OperatorRemoved(operatorId);
+    }
+
+    /**@notice this function calls SSVNetwork's `updateValidator()`
+     * @dev Updates a validator.
+     * @param publicKey Validator public key.
+     * @param _operatorIds Operator public keys.
+     * @param sharesPublicKeys Shares public keys.
+     * @param sharesEncrypted Encrypted private keys.
+     * @param amount Amount of tokens to deposit.
+     */
+    function updateValidators(bytes calldata publicKey,
         uint32[] calldata _operatorIds,
-        bytes[] calldata _sharesPublicKeys,
-        bytes[] calldata _sharesEncrypted,
-        uint256 _amount
+        bytes[] calldata sharesPublicKeys,
+        bytes[] calldata sharesEncrypted,
+        uint256 amount
     ) external onlyOwner {
-        network.updateValidator(_pubkey, _operatorIds, _sharesPublicKeys, _sharesEncrypted, _amount);
+        network.updateValidator(publicKey, _operatorIds, sharesPublicKeys, sharesEncrypted, amount);
     }
 
-    /**
-     * @notice returns operator ids, check operators here https://explorer.ssv.network/
+    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
      */
     function viewOperators() public view returns (uint32[] memory) {
-        return operatorIDs;
+        return operatorIds;
     }
 
-    /**
-     * @notice returns the Validators array
+    /**@notice returns the Validators array
      */
     function viewValidators() public view returns (bytes[] memory) {
         return validators;
     }
     
-    /**
-     * @notice returns user's staked amount
+    /**@notice returns user's staked amount
      */
     function viewUserStake(address _userAddress) public view returns (uint256) {
         return userStake[_userAddress];
