@@ -21,7 +21,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
     IDepositContract private immutable DepositContract;
     SSVETH public ssvETH;
     uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
-    address public whitelistKey;
+    bytes public publicKey;
     address public withdrawalKey;
     address public SSVTokenAddress;
     address public SSVNetworkAddress;
@@ -78,7 +78,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
     /**
      * @notice stake tokens
      */
-    function stake() public payable {
+    function stake() public payable nonReentrant {
         if(msg.value == 0) {
             revert StakingPool__CantStakeZeroWei();
         }
@@ -91,14 +91,24 @@ contract StakingPool is Ownable, ReentrancyGuard {
      * @notice Unstake tokens
      * @param _amount: Amount to be unstaked
      */
-    function unstake(uint256 _amount) public {
+    function unstake(uint256 _amount) public nonReentrant {
         ssvETH.burnFrom(msg.sender, _amount);
         (bool sent, ) = payable(msg.sender).call{value: _amount}("");
         if(!sent) {
             revert StakingPool__EtherCallFailed();
         }
-        userStake[msg.sender] = userStake[msg.sender] -= _amount;
+        userStake[msg.sender] -= _amount;
         emit UserUnstaked(msg.sender, _amount);
+    }
+
+    /** 
+     * @notice BUG FOUND INSIDE SSV CONTRACTS, I HAVE EMAILED SSVNETWORK ABOUT THIS. AWAITING RESPONSE
+     * @dev calls SSVNetwork which calls SSVRegistry to register operator
+     * @param name Operator's display name
+     * @param operatorAddr Operator's ethereum address that can collect fees
+     * @param fee The fee which the operator charges for each block. */
+    function registerOperator(string memory name, address operatorAddr, uint fee) public onlyOwner returns(uint operatorId) {
+
     }
 
     /**
@@ -139,7 +149,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
         bytes[] calldata _sharesPublicKeys,
         bytes[] calldata _sharesEncrypted,
         uint256 _amount
-    ) external onlyOwner() {
+    ) external onlyOwner {
         // Approve the transfer of tokens to the SSV contract
         IERC20(SSVTokenAddress).approve(SSVNetworkAddress, _amount);
         // Register the validator and deposit the shares
@@ -172,7 +182,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
         bytes[] calldata _sharesPublicKeys,
         bytes[] calldata _sharesEncrypted,
         uint256 _amount
-    ) external onlyOwner() {
+    ) external onlyOwner {
 
     }
 

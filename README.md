@@ -99,3 +99,7 @@ Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's 
 - [Goerli SSVNetwork](https://goerli.etherscan.io/address/0x3d776231fe7ee264c89a9b09647acfd955cd1d9b)
 - [Hardhat-contract sizer](https://github.com/sc-forks/solidity-coverage/issues/417#issuecomment-730539065)
 - [Example ssv grant proposal](https://docs.google.com/document/d/1ZOPtScnGhrMO3oFbeZMdlxmLdS4JTnup5rydVky9RC0/edit)
+- [SSV grant template](https://docs.google.com/document/d/11gW05q5zOd07mPMCBNw-u54NQWjLzadfuP5PK94vSJw/edit#)
+- [BLS12-381](https://hackmd.io/@benjaminion/bls12-381)
+- [BIP-0039](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
+- [EIP-2333](https://eips.ethereum.org/EIPS/eip-2333#implementation)
