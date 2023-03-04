@@ -8,12 +8,14 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
   const { deployer, withdrawalCreds } = await getNamedAccounts();
   const { deploy, log } = deployments;
   const chainId = await getChainId();
-  log("chainId:", chainId);
-  // log("network name:", network.name);
-  // log("deployer:", deployer);
-  // log("withdrawalCreds:", withdrawalCreds);
-  // log("operatorIds:", networkConfig[chainId].operatorIds);
-  // log("ssvContract:", networkConfig[chainId].ssvNetwork);
+  /* TESTING VARIABLES
+   * log("chainId:", chainId);
+   * log("network name:", network.name);
+   * log("deployer:", deployer);
+   * log("withdrawalCreds:", withdrawalCreds);
+   * log("operatorIds:", networkConfig[chainId].operatorIds);
+   * log("ssvContract:", networkConfig[chainId].ssvNetwork);
+   */
 
   if (developmentChains.includes(network.name)) {
     // Deposit Contract
