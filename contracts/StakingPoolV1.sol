@@ -6,201 +6,220 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IDepositContract.sol";
 import "./interfaces/ISSVNetwork.sol";
-import "./SSVETH.sol";
 
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
 error StakingPool__EtherCallFailed();
+error StakingPool__OperatorIdAlreadyAdded(uint32 operatorId, uint index);
+error StakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKeys, uint encryptedKeys);
+error StakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
+error StakingPool__InvalidPublicKeyLength(uint publicKeyLength);
+error StakingPool__NotEnoughStaked(uint amountStaked ,uint amount);
 
 /**
 * @title StakingPool
 * @author Rohan Nero
-* @notice this contract allows multiple users to activate a validator and split the key into SSV keyshares */
+* @notice this contract allows multiple users to activate a validator and split the key into SSV keyshares
+* @dev this contract does not have a liquid staking token */
 contract StakingPoolV1 is Ownable, ReentrancyGuard {
 
     IDepositContract private immutable DepositContract;
-    SSVETH public ssvETH;
-    uint256 private constant VALIDATOR_AMOUNT = 32 * 1e18;
-    address public SSVTokenAddress;
-    address public SSVNetworkAddress;
-
-    uint32[] private operatorIDs;
+    IERC20 private token;
+    ISSVNetwork private network;
+    uint72 private constant VALIDATOR_AMOUNT = 32 * 1e18;
+    uint32[] private operatorIds;
     bytes[] private validators;
     mapping(address => uint256) private userStake;
 
     event UserStaked(address indexed user, uint256 indexed amount);
     event UserUnstaked(address indexed user, uint256 indexed amount);
-    event PubKeyDeposited(bytes pubkey);
-    event OperatorIDsChanged(uint32[] oldOperators, uint32[] newOperators);
+    event PublicKeyDeposited(bytes indexed pubkey);
+    event OperatorAdded(uint32 indexed operatorId, uint operatorIdsIndex);
+    event OperatorRemoved(uint32 indexed operatorId);
     event KeySharesDeposited(
-        bytes pubkey,
-        bytes[] sharesPublicKeys,
+        bytes indexed pubkey,
+        bytes[] indexed sharesPublicKeys,
+        uint32[] indexed operatorIds,
         uint256 amount
     );
 
-    /**
-        * @param depositAddress the beacon chain's deposit contract
-        * @param ssvNetwork the SSVNetwork contract address
-        * @param ssvToken the SSVToken contract address
-        * @param ids the SSV operatorIds you've selected */
+    /**@notice sets contract addresses and operatorIds 
+     * @param depositAddress the beacon chain's deposit contract
+     * @param ssvNetwork the ISSVNetwork contract address (interface)
+     * @param ssvToken the SSVToken contract address
+     * @param _operatorIds the SSV operatorIds you've selected */
     constructor(
         address depositAddress,
         address ssvNetwork,
         address ssvToken,
-        uint32[] memory ids
+        uint32[] memory _operatorIds
     ) {
         DepositContract = IDepositContract(depositAddress);
-        SSVETH _ssvETH = new SSVETH();
-        ssvETH = SSVETH(address(_ssvETH));
-        SSVNetworkAddress = ssvNetwork;
-        SSVTokenAddress = ssvToken;
-        if(ids.length < 4) {
-            revert StakingPool__AtleastFourOperators(ids.length);
+        token = IERC20(ssvToken);
+        network = ISSVNetwork(ssvNetwork);
+        if(_operatorIds.length < 4) {
+            revert StakingPool__AtleastFourOperators(_operatorIds.length);
         }
-        operatorIDs = ids;
+        operatorIds = _operatorIds;
     }
 
-    /** @notice called when the contract receives ETH */
+    /**@notice called when the contract receives ETH 
+     */
     receive() external payable {
-        ssvETH.mint(msg.sender, msg.value);
         userStake[msg.sender] += msg.value;
         emit UserStaked(msg.sender, msg.value);
     }    
 
-    /**
-     * @notice stake tokens
+    /**@notice stake tokens
      */
     function stake() public payable nonReentrant {
         if(msg.value == 0) {
             revert StakingPool__CantStakeZeroWei();
         }
-        ssvETH.mint(msg.sender, msg.value);
         userStake[msg.sender] += msg.value;
         emit UserStaked(msg.sender, msg.value);
     }
 
-    /**
-     * @notice Unstake tokens
-     * @param _amount: Amount to be unstaked
+    /**@notice Unstake tokens
+     * @param amount: Amount to be unstaked
      */
-    function unstake(uint256 _amount) public nonReentrant {
-        ssvETH.burnFrom(msg.sender, _amount);
-        (bool sent, ) = payable(msg.sender).call{value: _amount}("");
+    function unstake(uint256 amount) public nonReentrant {
+        if(amount > userStake[msg.sender]) {
+            revert StakingPool__NotEnoughStaked(userStake[msg.sender], amount);
+        }
+        userStake[msg.sender] -= amount;
+        (bool sent, ) = payable(msg.sender).call{value: amount}("");
         if(!sent) {
             revert StakingPool__EtherCallFailed();
-        }
-        userStake[msg.sender] -= _amount;
-        emit UserUnstaked(msg.sender, _amount);
+        } 
+        emit UserUnstaked(msg.sender, amount);
     }
 
-    /** 
-     * @notice BUG FOUND INSIDE SSV CONTRACTS, I HAVE EMAILED SSVNETWORK ABOUT THIS. AWAITING RESPONSE
-     * @dev calls SSVNetwork which calls SSVRegistry to register operator
-     * @param name Operator's display name
-     * @param operatorAddr Operator's ethereum address that can collect fees
-     * @param fee The fee which the operator charges for each block. */
-    function registerOperator(string memory name, address operatorAddr, uint fee) public onlyOwner returns(uint operatorId) {
-        
-    }
-
-    /**
-     * @notice Deposit a validator to the deposit contract
+    /**@notice Deposit a validator to the deposit contract
      * @dev these params together are known as the DepositData
-     * @param _pubkey: Public key of the validator
+     * @param publicKey: Public key of the validator
      * @param _withdrawal_credentials: Withdrawal public key of the validator
      * @param _signature: BLS12-381 signature of the deposit data
      * @param _deposit_data_root: The SHA-256 hash of the SSZ-encoded DepositData object
      */
     function depositValidator(
-        bytes calldata _pubkey,
+        bytes calldata publicKey,
         bytes calldata _withdrawal_credentials,
         bytes calldata _signature,
         bytes32 _deposit_data_root
     ) external onlyOwner {
-        // Deposit the validator to the deposit contract
+        if (publicKey.length != 48) {
+            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+        }
         DepositContract.deposit{value: VALIDATOR_AMOUNT}(
-            _pubkey,
+            publicKey,
             _withdrawal_credentials,
             _signature,
             _deposit_data_root
         );
-        emit PubKeyDeposited(_pubkey);
+        emit PublicKeyDeposited(publicKey);
     }
 
-    /**
-     * @notice Deposit shares for a validator
-     * @param _pubkey: Public key of the validator
+    /**@notice allows owner to submit validator keys and operator keys to SSVNetwork
+     * @dev Deposit shares for a validator
+     * @param publicKey: Public key of the validator
      * @param _operatorIds: IDs of the validator's operators
-     * @param _sharesPublicKeys: Public keys of the shares
-     * @param _sharesEncrypted: Encrypted shares
-     * @param _amount: Amount of tokens to be deposited
+     * @param sharesPublicKeys: Public keys of the shares
+     * @param encryptedKeys: Encrypted private keys
+     * @param amount: Amount of tokens to be deposited
      */
     function depositShares(
-        bytes calldata _pubkey,
+        bytes calldata publicKey,
         uint32[] calldata _operatorIds,
-        bytes[] calldata _sharesPublicKeys,
-        bytes[] calldata _sharesEncrypted,
-        uint256 _amount
+        bytes[] calldata sharesPublicKeys,
+        bytes[] calldata encryptedKeys,
+        uint256 amount
     ) external onlyOwner {
-        // Approve the transfer of tokens to the SSV contract
-        IERC20(SSVTokenAddress).approve(SSVNetworkAddress, _amount);
-        // Register the validator and deposit the shares
-        ISSVNetwork(SSVNetworkAddress).registerValidator(
-            _pubkey,
-            _operatorIds,
-            _sharesPublicKeys,
-            _sharesEncrypted,
-            _amount
-        );
-        validators.push(_pubkey);
-        emit KeySharesDeposited(_pubkey, _sharesPublicKeys, _amount);
-    }
-
-    /**
-     * @dev Update operators
-     * @param _newOperators: Array of the the new operators Ids
-     */
-    function updateOperators(uint32[] memory _newOperators) public onlyOwner {
-        if(_newOperators.length < 4) {
-            revert StakingPool__AtleastFourOperators(_newOperators.length);
+        if (publicKey.length != 48) {
+            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
         }
-        uint32[] memory oldIds = operatorIDs;
-        operatorIDs = _newOperators;
-        emit OperatorIDsChanged(oldIds, _newOperators);
+        if (_operatorIds.length < 4 ) {
+            revert StakingPool__AtleastFourOperators(_operatorIds.length);
+        }
+        if (
+            _operatorIds.length != sharesPublicKeys.length ||
+            _operatorIds.length != encryptedKeys.length
+            
+        ) {
+            revert StakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
+        }
+        token.approve(address(network), amount);
+        network.registerValidator(
+            publicKey,
+            _operatorIds,
+            sharesPublicKeys,
+            encryptedKeys,
+            amount
+        );
+        validators.push(publicKey);
+        emit KeySharesDeposited(publicKey, sharesPublicKeys,_operatorIds, amount);
     }
 
-    function updateValidators(bytes calldata _pubkey,
+    /**@notice allows the owner to add operators to the operatorIds array
+     * @param  operatorId the operatorId assigned by SSV */
+    function addOperator(uint32 operatorId) public onlyOwner {
+        for(uint i; i < operatorIds.length; i++) {
+            if(operatorIds[i] == operatorId) {
+                revert StakingPool__OperatorIdAlreadyAdded(operatorId, i);
+            }
+        }
+        operatorIds.push(operatorId);
+        emit OperatorAdded(operatorId, operatorIds.length -1);
+    }
+
+    /**@notice allows owner to remove operators from the operatorIds array 
+     * @param operatorIndex operatorIds array index of the Id to be removed */
+    function removeOperator(uint32 operatorIndex) public onlyOwner {
+        uint32 operatorId = operatorIds[operatorIndex];
+        if(operatorIndex >= operatorIds.length) {
+            revert StakingPool__InvalidOperatorIndex(operatorIds.length, operatorIndex);
+        }
+        if(operatorIds.length - 1 == operatorIndex) {
+            operatorIds.pop;
+        } else {
+            operatorIds[operatorIndex] = operatorIds[operatorIds.length - 1];
+            operatorIds.pop;
+        }
+        emit OperatorRemoved(operatorId);
+    }
+
+    /**@notice this function calls SSVNetwork's `updateValidator()`
+     * @dev Updates a validator.
+     * @param publicKey Validator public key.
+     * @param _operatorIds Operator public keys.
+     * @param sharesPublicKeys Shares public keys.
+     * @param sharesEncrypted Encrypted private keys.
+     * @param amount Amount of tokens to deposit.
+     */
+    function updateValidators(bytes calldata publicKey,
         uint32[] calldata _operatorIds,
-        bytes[] calldata _sharesPublicKeys,
-        bytes[] calldata _sharesEncrypted,
-        uint256 _amount
+        bytes[] calldata sharesPublicKeys,
+        bytes[] calldata sharesEncrypted,
+        uint256 amount
     ) external onlyOwner {
-
+        network.updateValidator(publicKey, _operatorIds, sharesPublicKeys, sharesEncrypted, amount);
     }
 
-    /**
-     * @notice returns operator ids, check operators here https://explorer.ssv.network/
+    /**@notice returns operator ids, check operators here https://explorer.ssv.network/
      */
     function viewOperators() public view returns (uint32[] memory) {
-        return operatorIDs;
+        return operatorIds;
     }
 
-    /**
-     * @notice returns the Validators array
+    /**@notice returns the Validators array
      */
     function viewValidators() public view returns (bytes[] memory) {
         return validators;
     }
     
-    /**
-     * @notice returns user's staked amount
+    /**@notice returns user's staked amount
      */
     function viewUserStake(address _userAddress) public view returns (uint256) {
         return userStake[_userAddress];
     }
-
-
-    
-
-    
 }

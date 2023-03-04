@@ -9,13 +9,13 @@ import "./interfaces/ISSVNetwork.sol";
 import "./SSVETH.sol";
 
 
-error StakingPool__AtleastFourOperators(uint idsLength);
-error StakingPool__CantStakeZeroWei();
-error StakingPool__EtherCallFailed();
-error StakingPool__OperatorIdAlreadyAdded(uint32 operatorId, uint index);
-error StakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKeys, uint encryptedKeys);
-error StakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
-error StakingPool__InvalidPublicKeyLength(uint publicKeyLength);
+error LiquidStakingPool__AtleastFourOperators(uint idsLength);
+error LiquidStakingPool__CantStakeZeroWei();
+error LiquidStakingPool__EtherCallFailed();
+error LiquidStakingPool__OperatorIdAlreadyAdded(uint32 operatorId, uint index);
+error LiquidStakingPool__InputLengthsMustMatch(uint operatorsIds, uint sharesPublicKeys, uint encryptedKeys);
+error LiquidStakingPool__InvalidOperatorIndex(uint operatorIdsLength, uint operatorIndex);
+error LiquidStakingPool__InvalidPublicKeyLength(uint publicKeyLength);
 
 /**
 * @title StakingPool
@@ -62,7 +62,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         token = IERC20(ssvToken);
         network = ISSVNetwork(ssvNetwork);
         if(_operatorIds.length < 4) {
-            revert StakingPool__AtleastFourOperators(_operatorIds.length);
+            revert LiquidStakingPool__AtleastFourOperators(_operatorIds.length);
         }
         operatorIds = _operatorIds;
     }
@@ -79,7 +79,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
      */
     function stake() public payable nonReentrant {
         if(msg.value == 0) {
-            revert StakingPool__CantStakeZeroWei();
+            revert LiquidStakingPool__CantStakeZeroWei();
         }
         ssvETH.mint(msg.sender, msg.value);
         userStake[msg.sender] += msg.value;
@@ -87,16 +87,16 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     }
 
     /**@notice Unstake tokens
-     * @param _amount: Amount to be unstaked
+     * @param amount: Amount to be unstaked
      */
-    function unstake(uint256 _amount) public nonReentrant {
-        ssvETH.burnFrom(msg.sender, _amount);
-        (bool sent, ) = payable(msg.sender).call{value: _amount}("");
+    function unstake(uint256 amount) public nonReentrant {
+        ssvETH.burnFrom(msg.sender, amount);
+        (bool sent, ) = payable(msg.sender).call{value: amount}("");
         if(!sent) {
-            revert StakingPool__EtherCallFailed();
+            revert LiquidStakingPool__EtherCallFailed();
         }
-        userStake[msg.sender] -= _amount;
-        emit UserUnstaked(msg.sender, _amount);
+        userStake[msg.sender] -= amount;
+        emit UserUnstaked(msg.sender, amount);
     }
 
     /**@notice Deposit a validator to the deposit contract
@@ -113,7 +113,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         bytes32 _deposit_data_root
     ) external onlyOwner {
         if (publicKey.length != 48) {
-            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+            revert LiquidStakingPool__InvalidPublicKeyLength(publicKey.length);
         }
         DepositContract.deposit{value: VALIDATOR_AMOUNT}(
             publicKey,
@@ -140,17 +140,17 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         uint256 amount
     ) external onlyOwner {
         if (publicKey.length != 48) {
-            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+            revert LiquidStakingPool__InvalidPublicKeyLength(publicKey.length);
         }
         if (_operatorIds.length < 4 ) {
-            revert StakingPool__AtleastFourOperators(_operatorIds.length);
+            revert LiquidStakingPool__AtleastFourOperators(_operatorIds.length);
         }
         if (
             _operatorIds.length != sharesPublicKeys.length ||
             _operatorIds.length != encryptedKeys.length
             
         ) {
-            revert StakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
+            revert LiquidStakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
         }
         token.approve(address(network), amount);
         network.registerValidator(
@@ -169,7 +169,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     function addOperator(uint32 operatorId) public onlyOwner {
         for(uint i; i < operatorIds.length; i++) {
             if(operatorIds[i] == operatorId) {
-                revert StakingPool__OperatorIdAlreadyAdded(operatorId, i);
+                revert LiquidStakingPool__OperatorIdAlreadyAdded(operatorId, i);
             }
         }
         operatorIds.push(operatorId);
@@ -181,7 +181,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     function removeOperator(uint32 operatorIndex) public onlyOwner {
         uint32 operatorId = operatorIds[operatorIndex];
         if(operatorIndex >= operatorIds.length) {
-            revert StakingPool__InvalidOperatorIndex(operatorIds.length, operatorIndex);
+            revert LiquidStakingPool__InvalidOperatorIndex(operatorIds.length, operatorIndex);
         }
         if(operatorIds.length - 1 == operatorIndex) {
             operatorIds.pop;
