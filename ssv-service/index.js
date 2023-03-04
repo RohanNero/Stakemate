@@ -18,7 +18,7 @@ const createValidatorConfig = (withdrawal_address) => {
     }
     let data = JSON.stringify(validatorConfig);
     fs.writeFileSync(`${withdrawal_address}-validator_config.json`, data);
-    
+
 }
 
 app.post('/create-keys', (req, res) => {
