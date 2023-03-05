@@ -29,7 +29,7 @@ const createValidatorConfig = (withdrawal_address) => {
         return;
     }
     console.log(`stdout: ${stdout}`);
-  }
+  });
 
 app.post('/create-keys', (req, res) => {
     console.log(req.body.withdrawal_address);
