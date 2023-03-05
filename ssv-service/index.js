@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const fs = require('fs');
-const crypto = require('crypto');
+const { exec } = require("child_process");
 
 app.use(express.json());
 
@@ -17,9 +17,19 @@ const createValidatorConfig = (withdrawal_address) => {
         "keystore_password": ""
     }
     let data = JSON.stringify(validatorConfig);
-    fs.writeFileSync(`${withdrawal_address}-validator_config.json`, data);
-
-}
+    let withdrawal_fn = `${withdrawal_address}-validator_config.json`;
+    fs.writeFileSync(`${withdrawal_fn}`, data);
+    exec(`python3 main.py create-keys -c ../${withdrawal_fn}`, { cwd: '/home/ferric/hardhat-dvt-staking/ssv-service/ssv' }, (error, stdout, stderr) => {
+      if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+  }
 
 app.post('/create-keys', (req, res) => {
     console.log(req.body.withdrawal_address);
