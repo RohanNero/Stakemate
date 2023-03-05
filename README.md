@@ -26,6 +26,10 @@ Once you have set your variables to
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
 
+To fork mainnet locally you can uncomment the `forking: { url: <key> }` url line in the network section of `hardhat.config.js` and run the previous command again.
+Or alternatively you can pass your api key directly when starting the blockchain like this:
+`yarn hardhat node --fork <apiKey>`
+
 Once your local blockchain is up and running, open a new terminal and you can now run some scripts!
 
 Try out staking and unstaking to the StakingPoolV1 contract with these commands:
@@ -36,9 +40,17 @@ Try out staking and unstaking to the StakingPoolV1 contract with these commands:
 
 Whenever you're ready to take things to the next step, lets deploy on Goerli testnet!
 
+### Deploying to a testnet
+
+For example:
+
 `yarn hardhat deploy --network goerli`
 
 The command line should return you your new contract addresses so you can view them on a block explorer
+
+From this point you can run your scripts like you did before but this time pass the corresponding network's name as an argument:
+
+`yarn hardhat run scripts/stake.js --network goerli`
 
 ### Deployed contract addresses:
 
@@ -47,59 +59,6 @@ The command line should return you your new contract addresses so you can view t
 - [StakingPoolV1](https://goerli.etherscan.io/address/0xB772Efb53A5dfAb66BaC0B025D07aF46623359e2#code)
 - [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0xAD59421FA63088091f96aD24675011bF9C4Cfa92#code)
 - [StakingFactoryV1](https://goerli.etherscan.io/address/0xD051E12d194D6D0378098D27C01dDee09fdE3Cea#code)
-
-### Steps to using SSV
-
-**Notice:** When deploying to a forked chain pass `http://localhost:8545` as the RPC url
-**Notice:** I had to add `override` to the SSVNetwork contract's `validatorsPerOperatorCount()`
-
-1. ### Stake a collective 32 ETH between all stakers
-
-   - This can be easily accomplished or mimicked for testing purposes, only involves StakingDVT logic.
-
-2. ### Generate your ethereum validator keys along with the `deposit_data_root`
-
-   -
-   - **ssv-awesome** reads from a config file to pass the params
-     1. **Command:** `python3 main.py create-keys -c sample_config/validator-config.json`
-     2. **Description:** "This option can be used to generate ethereum validator keys and their deposit data"
-
-3. ### Next step is to generate the key shares
-
-   -
-
-   - **ssv-awesome** reads from a config file to pass the params
-
-     1. **Command:** `python3 main.py generate-keyshares -c sample_config/keyshare-config.json`
-     2. **Description:** "This option can be used to generate SSV keyshares using ssv cli tool"
-
-4. ### Then you deposit the validator keys
-
-   - This should call the Beacon depositContract's `deposit()` function and pass it these params:
-
-     1. **bytes calldata** `pubkey` - A BLS12-381 public key
-     2. **bytes calldata** `withdrawal_credentials` - Commitment to a public key for withdrawals.
-     3. **bytes calldata** `signature` - A BLS12-381 signature.
-     4. **bytes32** `deposit_data_root` - The SHA-256 hash of the SSZ-encoded DepositData object. (Used as a protection against malformed input.)
-
-   - **ssv-awesome** reads from a config file to pass the params
-     1. **Command:** `python3 main.py deposit-validators -c sample_config/deposit-validator.json`
-     2. **Description:** "This option can be used to submit validator to stakepool"
-
-5. ### Finally you deposit the key shares
-
-   - This should call SSVNetwork's `registerValidator()` function and pass it these params:
-
-     1. **bytes** `publicKey` - Validator public key.
-     2. **uint32[]** `operatorIds` - Operator public keys.
-     3. **bytes[]** `sharesPublicKeys` - Shares public keys.
-     4. **bytes[]** `sharesEncrypted` - Encrypted private keys.
-     5. **uint256** `amount` - Amount of tokens to deposit.
-
-   - **ssv-awesome** reads from a config file to pass the params
-
-     1. **Command:** `python3 main.py deposit-keyshares -c sample_config/deposit-validator.json`
-     2. **Description:** "This option can be used to submit validator keyshares to stakepool"
 
 ## Helpful links & sources
 
