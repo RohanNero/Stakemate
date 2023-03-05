@@ -16,8 +16,6 @@ compile the contracts
 
 `yarn hardhat compile`
 
-If you want to use the same validator public key as the withdrawal public key then you need to see the `namedAccounts` section in the `hardhat.config.js` file.
-
 Now input your information into a `.env` file using the `.env.example` file as an example format.
 
 Once you have set your variables to
