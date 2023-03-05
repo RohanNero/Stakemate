@@ -52,6 +52,10 @@ module.exports = {
   networks: {
     hardhat: {
       chainId: 31337,
+      forking: {
+        enabled: true,
+        url: GOERLI_RPC_URL,
+      },
     },
     goerli: {
       chainId: 5,

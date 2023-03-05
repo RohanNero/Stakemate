@@ -30,10 +30,13 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
     SSVToken = SSVTokenObject.address;
     opIds = networkConfig[chainId].operatorIds;
   } else {
+    //log(networkConfig[chainId].SSVNetwork);
     depositContract = networkConfig[chainId].depositContract;
     SSVNetwork = networkConfig[chainId].SSVNetwork;
     SSVToken = networkConfig[chainId].SSVToken;
+
     opIds = networkConfig[chainId].operatorIds;
+    //log(opIds);
   }
 
   args = [depositContract, SSVNetwork, SSVToken, opIds];

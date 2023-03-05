@@ -26,6 +26,28 @@ Once you have set your variables to
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
 
+Once your local blockchain is up and running, open a new terminal and you can now run some scripts!
+
+Try out staking and unstaking to the StakingPoolV1 contract with these commands:
+
+`yarn hardhat run scripts/stake.js`
+
+`yarn hardhat run scripts/unstake.js`
+
+Whenever you're ready to take things to the next step, lets deploy on Goerli testnet!
+
+`yarn hardhat deploy --network goerli`
+
+The command line should return you your new contract addresses so you can view them on a block explorer
+
+### Deployed contract addresses:
+
+#### Goerli testnet
+
+- [StakingPoolV1](https://goerli.etherscan.io/address/0xB772Efb53A5dfAb66BaC0B025D07aF46623359e2#code)
+- [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0xAD59421FA63088091f96aD24675011bF9C4Cfa92#code)
+- [StakingFactoryV1](https://goerli.etherscan.io/address/0xD051E12d194D6D0378098D27C01dDee09fdE3Cea#code)
+
 ### Steps to using SSV
 
 **Notice:** When deploying to a forked chain pass `http://localhost:8545` as the RPC url

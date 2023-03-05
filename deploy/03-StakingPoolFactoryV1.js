@@ -21,7 +21,7 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
 
   if (!developmentChains.includes(network.name)) {
     log("Verifying contract...");
-    await verify(pool.address, args);
+    await verify(factory.address, []);
   }
 };
 
