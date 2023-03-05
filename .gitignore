@@ -6,4 +6,5 @@ yarn.lock
 yarn-error.log
 notes.md
 bugs.md
+legacyREADME.md
 deployments/*
