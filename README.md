@@ -26,6 +26,10 @@ Once you have set your variables to
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
 
+To fork mainnet locally you can uncomment the `forking: { url: <key> }` url line in the network section of `hardhat.config.js` and run the previous command again.
+Or alternatively you can pass your api key directly when starting the blockchain like this:
+`yarn hardhat node --fork <apiKey>`
+
 Once your local blockchain is up and running, open a new terminal and you can now run some scripts!
 
 Try out staking and unstaking to the StakingPoolV1 contract with these commands:
@@ -36,9 +40,15 @@ Try out staking and unstaking to the StakingPoolV1 contract with these commands:
 
 Whenever you're ready to take things to the next step, lets deploy on Goerli testnet!
 
+### Deploying to a testnet
+
 `yarn hardhat deploy --network goerli`
 
 The command line should return you your new contract addresses so you can view them on a block explorer
+
+From this point you can run your scripts like you did before but this time pass the corresponding network's name as an argument:
+
+`yarn hardhat run scripts/stake.js --network goerli`
 
 ### Deployed contract addresses:
 

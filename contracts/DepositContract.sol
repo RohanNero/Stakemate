@@ -109,7 +109,7 @@ contract DepositContract is IDepositContract, ERC165 {
         // Extended ABI length checks since dynamic types are used.
         require(pubkey.length == 48, "DepositContract: invalid pubkey length");
         require(withdrawal_credentials.length == 32, "DepositContract: invalid withdrawal_credentials length");
-        require(signature.length == 96, "DepositContract: invalid signature length");
+        require(signature.length == 96, "DepositContract: invalid signature length"); 
 
         // Check deposit amount
         require(msg.value >= 1 ether, "DepositContract: deposit value too low");

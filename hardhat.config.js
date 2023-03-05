@@ -17,6 +17,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const SNOWTRACE_API_KEY = process.env.SNOWTRACE_API_KEY;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
+const FORKING_RPC_URL = process.env.FORKING_RPC_URL;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -53,8 +54,8 @@ module.exports = {
     hardhat: {
       chainId: 31337,
       forking: {
-        enabled: true,
-        url: GOERLI_RPC_URL,
+        enabled: false,
+        url: FORKING_RPC_URL,
       },
     },
     goerli: {

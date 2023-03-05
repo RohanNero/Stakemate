@@ -12,13 +12,10 @@ async function stake() {
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
   const StakingPool = await ethers.getContract("StakingPoolV1");
-  //console.log("stakingPool:", StakingPool.address);
-  const tx = await StakingPool.stake({ value: stakeValue });
+  console.log("stakingPool:", StakingPool.address);
+  await StakingPool.stake({ value: stakeValue });
   console.log("Successfully staked", stakeValue, "WEI!");
   const totalStaked = await StakingPool.viewUserStake(deployer);
-  if (!developmentChains.includes(network.name)) {
-    await tx.wait(1);
-  }
   console.log("Bringing your total staked to:", totalStaked.toString(), "WEI!");
 }
 
