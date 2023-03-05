@@ -18,7 +18,7 @@ compile the contracts
 
 Now input your information into a `.env` file using the `.env.example` file as an example format.
 
-Once you have set your variables to
+Once you have set your `.env` file configured with your desired variables you can begin deploying
 
 ### Deploying locally
 
