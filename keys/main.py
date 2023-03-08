@@ -248,32 +248,32 @@ if __name__ == '__main__':
     """
     parser = argparse.ArgumentParser(description="Command line tool for SSV backend")
     subparses = parser.add_subparsers()
-    stake = subparses.add_parser("stake",
-                                 help="used to start a service that tracks stakinpool contract for keys and key shares")
-    stake.set_defaults(which="stake")
+    # stake = subparses.add_parser("stake",
+    #                              help="used to start a service that tracks stakinpool contract for keys and key shares")
+    # stake.set_defaults(which="stake")
 
     keys = subparses.add_parser("create-keys", help="create n validator keys")
     keys.set_defaults(which="keys")
 
-    validator = subparses.add_parser("deposit-validators", help="submit validator keys to the stakepool contract")
-    validator.add_argument("-c", "--config",
-                           help="pass a config file with required params. Ex: sample_config/validator-config.json",
-                           required=True)
-    validator.set_defaults(which="validator")
+    #validator = subparses.add_parser("deposit-validators", help="submit validator keys to the stakepool contract")
+    #validator.add_argument("-c", "--config",
+                           #help="pass a config file with required params. Ex: sample_config/validator-config.json",
+                           #required=True)
+    #validator.set_defaults(which="validator")
 
     keyshares = subparses.add_parser("generate-keyshares", help="generate ssv keyshares from validator keystore files")
     keyshares.set_defaults(which="keyshares")
 
-    deposit_keyshares = subparses.add_parser("deposit-keyshares", help="deposit ssv keyshare to ssv contract")
-    deposit_keyshares.add_argument("-c", "--config",
-                                   help="pass a config file with required params. Ex: sample_config/deposit-keyshares.json",
-                                   required=True)
+    #deposit_keyshares = subparses.add_parser("deposit-keyshares", help="deposit ssv keyshare to ssv contract")
+    #deposit_keyshares.add_argument("-c", "--config",
+                                   #help="pass a config file with required params. Ex: sample_config/deposit-keyshares.json",
+                                   #required=True)
 
-    deposit_keyshares.set_defaults(which="deposit")
+   # deposit_keyshares.set_defaults(which="deposit")
 
-    stake.add_argument("-c", "--config",
-                       help="pass a config file with required params. Ex: sample_config/stake-config.json",
-                       required=True)
+    # stake.add_argument("-c", "--config",
+    #                    help="pass a config file with required params. Ex: sample_config/stake-config.json",
+    #                    required=True)
     keys.add_argument("-c", "--config",
                       help="pass a config file with required params. Ex: sample_config/validator-config.json",
                       required=True)

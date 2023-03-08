@@ -43,7 +43,7 @@ and install some additional dependencies
 
 To see what command line options are supported you can run 
 
-`python main.py -h` / `--help`
+`python3 main.py -h` / `--help`
 
 But before we can call any functions, we first have to set our `keys/config` file variables to our desired values
 
@@ -58,6 +58,7 @@ Once you've generated validator keys, you're ready to update your `keys/config/k
 
 `python3 main.py generate-keyshares -c config/keyshare.json`
 
+Congratulations! You have now generated **validator keys** and **SSV keyshares** from the command line!
 
 ### Deploying locally 
 
