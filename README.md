@@ -58,7 +58,7 @@ Once you've generated **validator keys**, you're ready to update your `keys/conf
 
 `python3 main.py generate-keyshares -c config/keyshare.json`
 
-Congratulations! You have now generated **validator keys** and **SSV keyshares** from the command line!
+Congratulations! You have now generated both **validator keys** and **SSV keyshares** from the command line!
 
 ### Deploying locally 
 
