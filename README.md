@@ -49,11 +49,11 @@ But before we can call any functions, we first have to set our `keys/config` fil
 
 `keys/config/validator.json` is the first file you need to interact with. Replace the sample values for `validator_count`, `withdrawal_creds`, and `keystore_password`. *(You may leave the `keystore_password` blank if you're not using one)*
 
-Now you're ready to generate validator keys! To do so run this command:
+Now you're ready to generate **validator keys!** To do so run this command:
 
 `python3 main.py create-keys -c config/validator.json`
 
-Once you've generated validator keys, you're ready to update your `keys/config/keyshare.json` values with the correct `keystore_files` path and your desired operator information. Now finally lets split the validator key(s) by running:
+Once you've generated **validator keys**, you're ready to update your `keys/config/keyshare.json` values with the correct `keystore_files` path and your desired operator information. Now finally lets split the **validator key(s)** by running:
 
 
 `python3 main.py generate-keyshares -c config/keyshare.json`
