@@ -2,7 +2,7 @@
 
 Powered by the SSV network
 
-## How to use
+## Initial setup
 
 first clone into the repo
 
@@ -31,7 +31,13 @@ The `keys` folder is where we will handle all of the key generation/splitting, s
 
 `cd keys`
 
-Now we need to install some additional dependencies 
+First thing we should do is setup the SSV Key Distributer CLI
+
+`chmod +x setup.sh`
+
+`./setup.sh`
+
+and install some additional dependencies 
 
 `pip install -r requirements.txt`
 
