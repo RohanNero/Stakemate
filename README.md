@@ -31,7 +31,7 @@ The **keys** folder is where we will handle all of the key generation/splitting,
 
 `cd keys`
 
-First thing we should do is setup the SSV Key Distributer CLI
+First thing we should do is setup the SSV [Key Distributer CLI](https://docs.ssv.network/developers/tools/ssv-key-distributor/key-distributer-cli)
 
 `chmod +x setup.sh`
 
