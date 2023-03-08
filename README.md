@@ -16,11 +16,47 @@ compile the contracts
 
 `yarn hardhat compile`
 
-Now input your information into a `.env` file using the `.env.example` file as an example format.
+Now input your information into a `.env` file using the `.env.example` file as an example format
 
-Once you have set your variables to
+Now if you already have validator keys and keyshares, you can skip this next section and [begin deploying](#deploying-locally)
 
-### Deploying locally
+
+If not then don't worry this next section will provide you with everything you need to generate your own keys
+
+
+### Generating Keys 
+
+Before we can split our validator key, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in Python so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
+
+*Notice, before you generate keyshares you should've already picked out your preferred SSV operators. If you haven't already done this, you can view the entire selection of operators on the [ssv.network explorer](https://explorer.ssv.network/operators)*
+
+The `keys` folder is where we will handle all of the key generation/splitting, so begin by running this command to enter into it: 
+
+`cd keys`
+
+Now we need to install some additional dependencies 
+
+`pip install -r requirements.txt`
+
+To see what command line options are supported you can run 
+
+`python main.py -h` / `--help`
+
+But before we can call any functions, we first have to set our `keys/config` file variables to our desired values
+
+`keys/config/validator.json` is the first file you need to interact with. Replace the sample values for `validator_count`, `withdrawal_creds`, and `keystore_password`. *(You may leave the `keystore_password` blank if you're not using one)*
+
+Now you're ready to generate validator keys! To do so run this command:
+
+`python3 main.py create-keys -c config/validator.json`
+
+Once you've generated validator keys, you're ready to update your `keys/config/keyshare.json` values with the correct `keystore_files` path and your desired operator information. Now finally lets split the validator key(s) by running:
+
+
+`python3 main.py generate-keyshares -c config/keyshare.json`
+
+
+### Deploying locally 
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
 

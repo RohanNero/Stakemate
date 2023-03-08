@@ -65,6 +65,9 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         if(_operatorIds.length < 4) {
             revert LiquidStakingPool__AtleastFourOperators(_operatorIds.length);
         }
+        if(msg.value > 0) {
+            userStake[tx.origin] += msg.value;
+        }
         operatorIds = _operatorIds;
     }
 
@@ -80,7 +83,7 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
     /** Main functions */
 
 
-    /**@notice stake tokens
+    /**@notice stake tokens on behalf of msg.sender
      */
     function stake() public payable nonReentrant {
         if(msg.value == 0) {

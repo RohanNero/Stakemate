@@ -75,7 +75,7 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
     /** Main functions */
 
 
-    /**@notice stake tokens
+    /**@notice stake tokens on behalf of msg.sender
      */
     function stake() public payable nonReentrant {
         if(msg.value == 0) {
