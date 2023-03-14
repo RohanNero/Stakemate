@@ -2,23 +2,14 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-//import Header from "../component/Header";
+import Header from "../component/Header";
 import { useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 //const inter = Inter({ subsets: ["latin"] });
 
-const injected = new InjectedConnector();
-
 export default function Home() {
   const { activate, active, library: provider } = useWeb3React();
 
-  async function connect() {
-    try {
-      await activate(injected);
-    } catch (e) {
-      console.log(e);
-    }
-  }
   return (
     <>
       <Head>
@@ -28,7 +19,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>DVT Staking</div>
+        <Header />
       </main>
     </>
   );

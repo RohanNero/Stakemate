@@ -1,25 +1,15 @@
 // import { ConnectButton } from "web3uikit"
 import { useState } from "react";
 import { ethers } from "ethers";
+import { useWeb3React } from "@web3-react/core";
+import { InjectedConnector } from "@web3-react/injected-connector";
+import styles from "@/styles/Home.module.css";
+
+const injected = new InjectedConnector();
 
 export default function Header() {
-  const [isConnected, setIsConnected] = useState(false);
+  const { activate, active, library: provider } = useWeb3React();
   const [signer, setSigner] = useState(undefined);
-
-  async function connect() {
-    if (typeof window.ethereum !== "undefined") {
-      try {
-        await ethereum.request({ method: "eth_requestAccounts" });
-        setIsConnected(true);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        setSigner(provider.getSigner());
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      setIsConnected(false);
-    }
-  }
 
   //   async function registerAnswer() {
   //     if (typeof window.ethereum !== "undefined") {
@@ -50,16 +40,27 @@ export default function Header() {
   //       }
   //   }
 
+  async function connect() {
+    try {
+      await activate(injected);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async function getAnswer() {
     console.log("test getAnswer");
+  }
+  async function registerAnswer() {
+    console.log("test registerAnswer");
   }
 
   return (
     <div className="p-7 border-b-2 border-black bg-neutral-700 ">
-      <div></div>
+      <div className={styles.description}>DVT Staking</div>
       <div className="flex justify-end mr-10">
-        {isConnected ? (
-          ""
+        {active ? (
+          "Connected!"
         ) : (
           <button
             className="bg-slate-100 p-1 border-2 hover:bg-neutral-300 "
@@ -70,15 +71,7 @@ export default function Header() {
         )}
       </div>
 
-      {/* {isConnected ? (
-                <div>
-                <label></label>
-                    <input></input>
-                    </div>
-            ) : (
-                ""
-            )} */}
-      {isConnected ? (
+      {active ? (
         <div className=" mx-7rem flex justify-center ">
           <div>
             <label className="mx-1.5" for="search">
@@ -103,7 +96,6 @@ export default function Header() {
       ) : (
         ""
       )}
-      {/* <ConnectButton moralisAuth={false} /> */}
     </div>
   );
 }
