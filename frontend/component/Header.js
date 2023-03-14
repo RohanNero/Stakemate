@@ -56,27 +56,24 @@ export default function Header() {
   }
 
   return (
-    <div className="p-7 border-b-2 border-black bg-neutral-700 ">
-      <div className={styles.description}>DVT Staking</div>
-      <div className="flex justify-end mr-10">
+    <div className={styles.header}>
+      <div>
+        <p className={styles.title}>DVT Staking</p>
+      </div>
+      <div>
         {active ? (
           "Connected!"
         ) : (
-          <button
-            className="bg-slate-100 p-1 border-2 hover:bg-neutral-300 "
-            onClick={() => connect()}
-          >
+          <button className={styles.connectButton} onClick={() => connect()}>
             Connect
           </button>
         )}
       </div>
 
       {active ? (
-        <div className=" mx-7rem flex justify-center ">
+        <div>
           <div>
-            <label className="mx-1.5" for="search">
-              Search:
-            </label>
+            <label for="search">Search:</label>
             <input type="text" name="search "></input>
           </div>
 
