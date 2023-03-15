@@ -53,40 +53,40 @@ module.exports = {
     hardhat: {
       chainId: 31337,
       forking: {
-        enabled: true,
-        url: GOERLI_RPC_URL,
+        enabled: false, // set to true for forking
+        url: GOERLI_RPC_URL || "",
       },
     },
     goerli: {
       chainId: 5,
       blockConfirmations: 5,
-      url: GOERLI_RPC_URL,
+      url: GOERLI_RPC_URL || "",
       accounts: [PRIVATE_KEY],
     },
     mumbai: {
       chainId: 80001,
       blockConfirmations: 5,
-      url: MUMBAI_RPC_URL,
+      url: MUMBAI_RPC_URL || "",
       accounts: [PRIVATE_KEY],
     },
     fuji: {
       chainId: 43113,
       blockConfirmations: 5,
-      url: FUJI_RPC_URL,
+      url: FUJI_RPC_URL || "",
       accounts: [PRIVATE_KEY],
     },
     mainnet: {
       chainId: 1,
       blockConfirmations: 3,
-      url: MAINNET_RPC_URL,
+      url: MAINNET_RPC_URL || "",
       accounts: [PRIVATE_KEY],
     },
   },
   etherscan: {
     apiKey: {
-      goerli: ETHERSCAN_API_KEY,
-      polygonMumbai: POLYGONSCAN_API_KEY,
-      avalancheFujiTestnet: SNOWTRACE_API_KEY,
+      goerli: ETHERSCAN_API_KEY || "",
+      polygonMumbai: POLYGONSCAN_API_KEY || "",
+      avalancheFujiTestnet: SNOWTRACE_API_KEY || "",
     },
   },
 };
