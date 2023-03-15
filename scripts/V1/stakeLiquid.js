@@ -2,7 +2,7 @@ const { ethers, network, deployments } = require("hardhat");
 const {
   networkConfig,
   developmentChains,
-} = require("../helper-hardhat-config.js");
+} = require("../../helper-hardhat-config.js");
 
 /*@notice This function requires you to be on a chain with StakingPool already deployed */
 async function stake() {

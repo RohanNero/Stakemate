@@ -2,7 +2,7 @@ const { ethers, network } = require("hardhat");
 const {
   networkConfig,
   developmentChains,
-} = require("../helper-hardhat-config.js");
+} = require("../../helper-hardhat-config.js");
 
 /*@notice This function requires you to be on a chain with StakingPool already deployed */
 async function unStake() {
@@ -12,22 +12,14 @@ async function unStake() {
   //console.log(stakeValue);
   //console.log(deployer);
   const StakingPool = await ethers.getContract("StakingPoolV1");
-  const StakingPoolssvEthAddress = await StakingPool.ssvETH();
-  //console.log("ssvEth:", StakingPoolssvEthAddress);
-  const SSVETH = await ethers.getContractAt(
-    "SSVETH",
-    StakingPoolssvEthAddress.toString()
-  );
-  //console.log(SSVETH);
   const userStake = await StakingPool.viewUserStake(deployer);
   //console.log("userStake:", userStake.toString());
-  const SSVETHBalance = await SSVETH.balanceOf(deployer);
-  //console.log("SSVETHBalance:", SSVETHBalance.toString());
 
-  await SSVETH.approve(StakingPool.address, SSVETHBalance);
-  await StakingPool.unstake(userStake);
+  const tx = await StakingPool.unstake(userStake);
   console.log("Successfully unStaked", userStake.toString(), "WEI!");
-
+  if (!developmentChains.includes(network.name)) {
+    await tx.wait(1);
+  }
   const stillStaked = await StakingPool.viewUserStake(deployer);
   console.log("You now have", stillStaked.toString(), "still staked!");
 
