@@ -8,3 +8,5 @@ notes.md
 bugs.md
 deployments/*
 __pycache__
+keys/keyshares/*
+keys/validator_keys/*

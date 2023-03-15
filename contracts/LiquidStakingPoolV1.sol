@@ -51,12 +51,12 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
      * @param ssvNetwork the ISSVNetwork contract address (interface)
      * @param ssvToken the SSVToken contract address
      * @param _operatorIds the SSV operatorIds you've selected */
-    constructor(
+     constructor(
         address depositAddress,
         address ssvNetwork,
         address ssvToken,
         uint32[] memory _operatorIds
-    ) {
+    ) payable {
         DepositContract = IDepositContract(depositAddress);
         SSVETH _ssvETH = new SSVETH();
         ssvETH = SSVETH(address(_ssvETH));

@@ -105,7 +105,7 @@ contract SSVNetwork is OwnableUpgradeable, ISSVNetwork, VersionedContract {
         _updateLiquidationThresholdPeriod(minimumBlocksBeforeLiquidation_);
         _updateOperatorFeeIncreaseLimit(operatorMaxFeeIncrease_);
         _updateDeclareOperatorFeePeriod(declareOperatorFeePeriod_);
-        _updateExecuteOperatorFeePerkeyiod(executeOperatorFeePeriod_);
+        _updateExecuteOperatorFeePeriod(executeOperatorFeePeriod_);
         _ssvRegistryContract.initialize();
     }
 
