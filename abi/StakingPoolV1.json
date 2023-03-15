@@ -1,0 +1,419 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "depositAddress",
+        "type": "address"
+      },
+      { "internalType": "address", "name": "ssvNetwork", "type": "address" },
+      { "internalType": "address", "name": "ssvToken", "type": "address" },
+      { "internalType": "uint32[]", "name": "_operatorIds", "type": "uint32[]" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "idsLength", "type": "uint256" }
+    ],
+    "name": "StakingPool__AtleastFourOperators",
+    "type": "error"
+  },
+  { "inputs": [], "name": "StakingPool__CantStakeZeroWei", "type": "error" },
+  { "inputs": [], "name": "StakingPool__EtherCallFailed", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "operatorsIds", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "sharesPublicKeys",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "encryptedKeys", "type": "uint256" }
+    ],
+    "name": "StakingPool__InputLengthsMustMatch",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "requiredBalance",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "currentBalance", "type": "uint256" }
+    ],
+    "name": "StakingPool__InsufficientEtherBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "operatorIdsLength",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "operatorIndex", "type": "uint256" }
+    ],
+    "name": "StakingPool__InvalidOperatorIndex",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "publicKeyLength",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakingPool__InvalidPublicKeyLength",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "amountStaked", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "StakingPool__NotEnoughStaked",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint32", "name": "operatorId", "type": "uint32" },
+      { "internalType": "uint256", "name": "index", "type": "uint256" }
+    ],
+    "name": "StakingPool__OperatorIdAlreadyAdded",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes",
+        "name": "pubkey",
+        "type": "bytes"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes[]",
+        "name": "sharesPublicKeys",
+        "type": "bytes[]"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32[]",
+        "name": "operatorIds",
+        "type": "uint32[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "KeySharesDeposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "operatorId",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "operatorIdsIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "OperatorAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "operatorId",
+        "type": "uint32"
+      }
+    ],
+    "name": "OperatorRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes",
+        "name": "pubkey",
+        "type": "bytes"
+      }
+    ],
+    "name": "PublicKeyDeposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "UserStaked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "UserUnstaked",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint32", "name": "operatorId", "type": "uint32" }
+    ],
+    "name": "addOperator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes", "name": "publicKey", "type": "bytes" },
+      {
+        "internalType": "uint32[]",
+        "name": "_operatorIds",
+        "type": "uint32[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "sharesPublicKeys",
+        "type": "bytes[]"
+      },
+      { "internalType": "bytes[]", "name": "encryptedKeys", "type": "bytes[]" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "depositShares",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes", "name": "publicKey", "type": "bytes" },
+      {
+        "internalType": "bytes",
+        "name": "_withdrawal_credentials",
+        "type": "bytes"
+      },
+      { "internalType": "bytes", "name": "_signature", "type": "bytes" },
+      {
+        "internalType": "bytes32",
+        "name": "_deposit_data_root",
+        "type": "bytes32"
+      }
+    ],
+    "name": "depositValidator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint32", "name": "operatorIndex", "type": "uint32" }
+    ],
+    "name": "removeOperator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "unstake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes", "name": "publicKey", "type": "bytes" },
+      {
+        "internalType": "uint32[]",
+        "name": "_operatorIds",
+        "type": "uint32[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "sharesPublicKeys",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "sharesEncrypted",
+        "type": "bytes[]"
+      },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "updateValidators",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewDepositContractAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "depositContract",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewOperators",
+    "outputs": [
+      {
+        "internalType": "uint32[]",
+        "name": "operatorArray",
+        "type": "uint32[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewSSVNetworkAddress",
+    "outputs": [
+      { "internalType": "address", "name": "ssvNetwork", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewSSVTokenAddress",
+    "outputs": [
+      { "internalType": "address", "name": "ssvToken", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_userAddress", "type": "address" }
+    ],
+    "name": "viewUserStake",
+    "outputs": [
+      { "internalType": "uint256", "name": "usersStake", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewValidatorAmount",
+    "outputs": [
+      { "internalType": "uint72", "name": "validatorAmount", "type": "uint72" }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "viewValidators",
+    "outputs": [
+      { "internalType": "bytes[]", "name": "validatorArray", "type": "bytes[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "stateMutability": "payable", "type": "receive" }
+]
