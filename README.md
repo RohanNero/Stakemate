@@ -108,7 +108,7 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 
 ### Depositing keys
 
-First lets deposit your validator key and send 32 ETH to the deposit contract with this command
+First lets deposit your **validator key** and send **32 ETH** to the deposit contract with this command
 
 `yarn run scripts/depositValidatorPool.js`
 
