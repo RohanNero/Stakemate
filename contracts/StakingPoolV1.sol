@@ -54,12 +54,16 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
         address ssvNetwork,
         address ssvToken,
         uint32[] memory _operatorIds
-    ) {
+    ) payable {
         DepositContract = IDepositContract(depositAddress);
         token = IERC20(ssvToken);
         network = ISSVNetwork(ssvNetwork);
         if(_operatorIds.length < 4) {
             revert StakingPool__AtleastFourOperators(_operatorIds.length);
+        }
+        if(msg.value > 0) {
+            userStake[tx.origin] += msg.value;
+            emit UserStaked(tx.origin, msg.value);
         }
         operatorIds = _operatorIds;
     }

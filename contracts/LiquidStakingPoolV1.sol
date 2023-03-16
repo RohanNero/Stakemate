@@ -67,6 +67,8 @@ contract LiquidStakingPoolV1 is Ownable, ReentrancyGuard {
         }
         if(msg.value > 0) {
             userStake[tx.origin] += msg.value;
+            ssvETH.mint(tx.origin, msg.value);
+            emit UserStaked(tx.origin, msg.value);
         }
         operatorIds = _operatorIds;
     }

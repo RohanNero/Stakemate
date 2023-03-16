@@ -9,6 +9,7 @@ require("solidity-coverage");
 require("hardhat-deploy");
 require("chai");
 const MAINNET_RPC_URL = process.env.MAINNET_RPC_URL;
+const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
 const FUJI_RPC_URL = process.env.FUJI_RPC_URL;
@@ -57,6 +58,12 @@ module.exports = {
         url: GOERLI_RPC_URL || "",
       },
     },
+    sepolia: {
+      chainId: 11155111,
+      blockConfirmations: 5,
+      url: SEPOLIA_RPC_URL || "",
+      accounts: [PRIVATE_KEY, WITHDRAWAL_PRIVATE_KEY],
+    },
     goerli: {
       chainId: 5,
       blockConfirmations: 5,
@@ -84,6 +91,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
+      sepolia: ETHERSCAN_API_KEY || "",
       goerli: ETHERSCAN_API_KEY || "",
       polygonMumbai: POLYGONSCAN_API_KEY || "",
       avalancheFujiTestnet: SNOWTRACE_API_KEY || "",

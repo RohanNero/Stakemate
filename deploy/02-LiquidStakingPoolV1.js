@@ -52,4 +52,4 @@ module.exports = async ({ deployments, getNamedAccounts }) => {
   }
 };
 
-module.exports.tags = ["all", "main", "lpool"];
+module.exports.tags = ["all", "main", "liquid"];

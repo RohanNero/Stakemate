@@ -94,9 +94,25 @@ From this point you can run your scripts like you did before but this time pass 
 
 #### Goerli testnet
 
-- [StakingPoolV1](https://goerli.etherscan.io/address/0xB772Efb53A5dfAb66BaC0B025D07aF46623359e2#code)
-- [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0xAD59421FA63088091f96aD24675011bF9C4Cfa92#code)
-- [StakingFactoryV1](https://goerli.etherscan.io/address/0xD051E12d194D6D0378098D27C01dDee09fdE3Cea#code)
+- [StakingPoolV1](https://goerli.etherscan.io/address/0xB25A33CbA69460A1C7c0E432abAb9562b8e84bFE#code)
+- [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0x2078Fe17Fd0B1b0C4b504d30CA8713Cd729CcB28#code)
+- [StakingFactoryV1](https://goerli.etherscan.io/address/0x7a5CDE8859372C056DDd0fB900F5D251a48C6850#code)
+
+#### Sepolia testnet
+
+_Currently unavaliable since SSV Network contracts are only deployed on goerli_
+
+- [StakingPoolV1]()
+- [LiquidStakingPoolV1]()
+- [StakingFactoryV1]()
+
+### Depositing keys
+
+First lets deposit your validator key and send 32 ETH to the deposit contract with this command
+
+`yarn run scripts/depositValidatorPool.js`
+
+_If you try to run this script without having atleast 32ETH in the contract it will throw an error_
 
 ## Helpful links & sources
 
