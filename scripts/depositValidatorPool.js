@@ -11,8 +11,6 @@ const fs = require("fs-extra");
 async function depositValidator() {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
-  const stakeValue = networkConfig[chainId].stakeValue;
-  //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
   const stakingPool = await ethers.getContract("StakingPoolV1");
   //console.log("stakingPool:", stakingPool.address);
