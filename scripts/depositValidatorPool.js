@@ -14,8 +14,8 @@ async function depositValidator() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
-  const StakingPool = await ethers.getContract("StakingPoolV1");
-  //console.log("stakingPool:", StakingPool.address);
+  const stakingPool = await ethers.getContract("StakingPoolV1");
+  //console.log("stakingPool:", stakingPool.address);
   // const abi = fs.readFile("./abi/StakingPoolV1.json", function (err, data) {
   //   console.log(data);
   // });
@@ -34,16 +34,27 @@ async function depositValidator() {
     }
   }
   const depositData = fs.readJsonSync(path, { encoding: "utf8" });
-  console.log(depositData);
+  //console.log(depositData);
   //console.log("depositData length:", depositData.length);
   for (let i = 0; i < depositData.length; i++) {
-    const args = [
-      depositData[i].pubkey,
-      depositData[i].withdrawal_credentials,
-      depositData[i].signature,
-      depositData[i].deposit_message_root,
-    ];
-    console.log(args);
+    // const args = [
+    //   depositData[i].pubkey,
+    //   depositData[i].withdrawal_credentials,
+    //   depositData[i].signature,
+    //   depositData[i].deposit_data_root,
+    // ];
+    // console.log(args);
+    const tx = await stakingPool.depositValidator(
+      "0x" + depositData[i].pubkey,
+      "0x" + depositData[i].withdrawal_credentials,
+      "0x" + depositData[i].signature,
+      "0x" + depositData[i].deposit_data_root
+    );
+    const txReceipt = await tx.wait(1);
+    //console.log(txReceipt.events[1].event);
+    if (txReceipt.events[1].event.includes("PublicKeyDeposited")) {
+      console.log("The public key", depositData[i].pubkey, "was deposited!");
+    }
   }
 }
 
