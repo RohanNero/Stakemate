@@ -112,7 +112,7 @@ First lets deposit your **validator key** and send 32 ETH to the **deposit contr
 
 `yarn run scripts/depositValidatorPool.js`
 
-_If you try to run this script without having atleast 32ETH in the contract it will throw an error_
+_If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
 
 ## Helpful links & sources
 
