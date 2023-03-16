@@ -44,7 +44,7 @@ To see what command line options are supported you can run
 
 `python3 main.py -h` / `--help`
 
-But before we can call any functions, we first have to set our `keys/config` file variables to our desired values
+**But before we can call any functions**, we first have to set our `keys/config` file variables to our desired values
 
 `keys/config/validator.json` is the first file you need to interact with. Replace the sample values for `validator_count`, `withdrawal_creds`, and `keystore_password`. _(You may leave the `keystore_password` blank if you're not using one)_
 
@@ -52,7 +52,7 @@ Now you're ready to generate **validator keys!** To do so run this command:
 
 `python3 main.py create-keys -c config/validator.json`
 
-Once you've generated **validator keys**, you're ready to update your `keys/config/keyshare.json` values with the correct `keystore_files` path and your desired operator information. Now finally lets split the **validator key(s)** by running:
+Once you've generated **validator keys**, you're ready to **update your `keys/config/keyshare.json` values** with the correct `keystore_files` path and your desired operator information. Now finally lets split the **validator key(s)** by running:
 
 `python3 main.py generate-keyshares -c config/keyshare.json`
 
@@ -60,15 +60,15 @@ Congratulations! You have now generated both **validator keys** and **SSV keysha
 
 ### Deploying locally
 
-_you must be in the root directory, either run `cd ..` or open a new terminal_
+**_you must be in the root directory, either run `cd ..` or open a new terminal_**
 
 Now you can use `yarn hardhat node` to deploy the contracts and start hardhat's local blockchain
 
 To fork mainnet locally you can uncomment the `forking: { url: <key> }` url line in the network section of `hardhat.config.js` and run the previous command again.
-Or alternatively you can pass your api key directly when starting the blockchain like this:
+Alternatively you can pass your api key directly when starting the blockchain like this:
 `yarn hardhat node --fork <apiKey>`
 
-Once your local blockchain is up and running, open a new terminal and you can now run some scripts!
+Once your local blockchain is up and running, **open a new terminal** and you can now run some scripts!
 
 Try out staking and unstaking to the StakingPoolV1 contract with these commands:
 
@@ -76,7 +76,7 @@ Try out staking and unstaking to the StakingPoolV1 contract with these commands:
 
 `yarn hardhat run scripts/unstake.js`
 
-Whenever you're ready to take things to the next step, lets deploy on Goerli testnet!
+Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
 
 ### Deploying to a testnet
 
