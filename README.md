@@ -64,13 +64,13 @@ _you must be in the root directory, either run `cd ..` or open a new terminal_
 
 Now you can use `yarn hardhat node` to **deploy the contracts** and **start hardhat's local blockchain**
 
-To fork mainnet locally you can uncomment the `forking: { url: <key> }` url line in the network section of `hardhat.config.js` and run the previous command again.
+To **fork mainnet locally** you can uncomment the `forking: { url: <key> }` url line in the **network** section of `hardhat.config.js` and run the previous command again.
 Alternatively you can pass your api key directly when starting the blockchain like this:
 `yarn hardhat node --fork <apiKey>`
 
 Once your local blockchain is up and running, **open a new terminal** and you can now run some scripts!
 
-Try out staking and unstaking to the StakingPoolV1 contract with these commands:
+Try out staking and unstaking to the **StakingPoolV1** contract with these commands:
 
 `yarn hardhat run scripts/stake.js`
 
