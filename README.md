@@ -22,7 +22,7 @@ Now if you already have **validator keys** and **keyshares**, you can skip this 
 
 ### Generating Keys
 
-Before we can split our validator key, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in Python so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
+Before we can split our **validator key**, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in **Python** so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
 
 _Notice, before you generate keyshares you should've already picked out your preferred SSV operators. If you haven't already done this, you can view the entire selection of operators on the [ssv.network explorer](https://explorer.ssv.network/operators)_
 
