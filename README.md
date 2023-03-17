@@ -70,11 +70,25 @@ Alternatively you can pass your api key directly when starting the blockchain li
 
 Once your local blockchain is up and running, **open a new terminal** and you can now run some scripts!
 
+### Running scripts
+
 Try out staking and unstaking to the **StakingPoolV1** contract with these commands:
 
-`yarn hardhat run scripts/stake.js`
+`yarn hardhat run scripts/V1/stake.js --network localhost`
 
-`yarn hardhat run scripts/unstake.js`
+`yarn hardhat run scripts/V1/unstake.js --network localhost`
+
+#### Depositing keys
+
+First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command
+
+`yarn hardhat run scripts/depositValidatorPool.js --network localhost`
+
+_If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
+
+Once you have successfully deposited your validator key, it's time to deposit your keyshares!
+
+`yarn hardhat run scripts/depositKeyshares.js --network localhost`
 
 Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
 
@@ -105,14 +119,6 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 - [StakingPoolV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 - [LiquidStakingPoolV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 - [StakingFactoryV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
-
-### Depositing keys
-
-First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command
-
-`yarn run scripts/depositValidatorPool.js`
-
-_If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
 
 ## Helpful links & sources
 
