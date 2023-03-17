@@ -46,24 +46,24 @@ async function depositKeyshares() {
   for (let i = 0; i < keysharesFolder.length; i++) {
     if (keysharesFolder[i].includes("keyshares")) {
       path = "./keys/keyshares/" + keysharesFolder[i];
-      console.log("path:", path);
+      //console.log("path:", path);
       const keyshares = fs.readJsonSync(path, { encoding: "utf8" });
       //console.log("keyshareAtIndex:", keyshares[i]);
       //console.log(keyshares.payload.readable);
       const payload = keyshares.payload.readable;
-      console.log("---------------------");
-      console.log("PAYLOAD CONSOLE LOGS");
-      console.log("---------------------");
-      console.log("validatorKey:", payload.validatorPublicKey);
+      //console.log("---------------------");
+      //console.log("PAYLOAD CONSOLE LOGS");
+      //console.log("---------------------");
+      //console.log("validatorKey:", payload.validatorPublicKey);
       //console.log("operatorIds:", payload.operatorIds);
-      // console.log(payload.sharePublicKeys);
-      // console.log(payload.sharePrivateKey);
+      //console.log(payload.sharePublicKeys);
+      //console.log(payload.sharePrivateKey);
       //console.log("ssvAmount:", payload.ssvAmount);
-      console.log("---------------------");
+      //console.log("---------------------");
 
-      const opIds = payload.operatorIds.split(",");
-      //console.log("operatorIds:", opIds);
       try {
+        const opIds = payload.operatorIds.split(",");
+        //console.log("operatorIds:", opIds);
         const tx = await stakingPool.depositShares(
           payload.validatorPublicKey,
           opIds,
@@ -86,6 +86,8 @@ async function depositKeyshares() {
           console.log(
             "You may need to restart your hardhat node or generate a new validator key."
           );
+        } else {
+          console.log(error);
         }
       }
     }
