@@ -26,7 +26,7 @@ Before we can split our **validator key**, we will obviously need to create some
 
 _Notice, before you generate keyshares you should've already picked out your preferred SSV operators. If you haven't already done this, you can view the entire selection of operators on the [ssv.network explorer](https://explorer.ssv.network/operators)_
 
-The **keys** folder is where we will handle all of the key generation/splitting, so begin by running this command to enter into it:
+The **keys** folder is where we will handle all of the key generation/splitting, so begin by running:
 
 `cd keys`
 
