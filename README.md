@@ -44,7 +44,7 @@ To see what command line options are supported you can run
 
 `python3 main.py -h` / `--help`
 
-**But before we can call any functions**, we first have to set our `keys/config` file variables to our desired values
+**🍄 But before we can call any functions**, we first have to set our `keys/config` file variables to our desired values
 
 `keys/config/validator.json` is the first file you need to interact with. Replace the sample values for `validator_count`, `withdrawal_creds`, and `keystore_password`. _(You may leave the `keystore_password` blank if you're not using one)_
 
