@@ -19,6 +19,13 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const SNOWTRACE_API_KEY = process.env.SNOWTRACE_API_KEY;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 
+// task("deposit-keyshares", "deposits keyshare payload to SSVNetwork contract")
+//   .addParam("address", "which c")
+//   .setAction(async (taskArgs) => {
+//     const balance = await ethers.provider.getBalance(taskArgs.account);
+
+//     console.log(ethers.utils.formatEther(balance), "ETH");
+//   });
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
