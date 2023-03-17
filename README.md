@@ -104,7 +104,7 @@ From this point you can run your scripts like you did before but this time pass 
 
 `yarn hardhat run scripts/stake.js --network goerli`
 
-### :maple_leaf: Deployed contract addresses:
+### :tulip: Deployed contract addresses:
 
 #### :white_flower: Goerli testnet
 
