@@ -1,8 +1,8 @@
-# Staking DVT
+# :mage: Staking DVT
 
 Powered by the SSV network
 
-## :mage: Initial setup
+## :white_flower: Initial setup
 
 first **clone** into the repo
 
