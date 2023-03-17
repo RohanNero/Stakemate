@@ -4,15 +4,15 @@ Powered by the SSV network
 
 ## Initial setup
 
-first clone into the repo
+first **clone** into the repo
 
 `git clone https://github.com/RohanNero/hardhat-dvt-staking`
 
-install the dependencies
+**install** the dependencies
 
 `yarn install`
 
-compile the contracts
+**compile** the contracts
 
 `yarn hardhat compile`
 
