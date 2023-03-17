@@ -20,7 +20,7 @@ Now input your information into a `.env` file using the `.env.example` file as a
 
 Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry, this next section will provide you with everything you need to generate your own keys
 
-### :blossom: Generating Keys
+### 🌼 Generating Keys
 
 Before we can split our **validator key**, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in **Python** so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
 
