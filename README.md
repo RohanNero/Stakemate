@@ -20,7 +20,7 @@ Now input your information into a `.env` file using the `.env.example` file as a
 
 Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry, this next section will provide you with everything you need to generate your own keys
 
-### :white_flower: Generating Keys
+### :blossom: Generating Keys
 
 Before we can split our **validator key**, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in **Python** so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
 
@@ -112,7 +112,7 @@ From this point you can run your scripts like you did before but this time pass 
 - [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0x2078Fe17Fd0B1b0C4b504d30CA8713Cd729CcB28#code)
 - [StakingFactoryV1](https://goerli.etherscan.io/address/0x7a5CDE8859372C056DDd0fB900F5D251a48C6850#code)
 
-#### :blossom: Sepolia testnet
+#### :white_flower: Sepolia testnet
 
 _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 
