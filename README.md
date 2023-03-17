@@ -106,7 +106,7 @@ From this point you can run your scripts like you did before but this time pass 
 
 ### :tulip: Deployed contract addresses:
 
-#### :white_flower: Goerli testnet
+#### :wilted_flower: Goerli testnet
 
 - [StakingPoolV1](https://goerli.etherscan.io/address/0xB25A33CbA69460A1C7c0E432abAb9562b8e84bFE#code)
 - [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0x2078Fe17Fd0B1b0C4b504d30CA8713Cd729CcB28#code)
@@ -120,7 +120,7 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 - [LiquidStakingPoolV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 - [StakingFactoryV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 
-## Helpful links & sources
+## :bouquet: Helpful links & sources
 
 - [Goerli SSVToken on etherscan](https://goerli.etherscan.io/address/0x3a9f01091c446bde031e39ea8354647afef091e7)
 - [Goerli SSV faucet](https://faucet.ssv.network/)
