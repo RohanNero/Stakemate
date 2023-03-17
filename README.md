@@ -86,7 +86,7 @@ First lets deposit your **validator key** and send 32 ETH to the **deposit contr
 
 _If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
 
-Once you have successfully deposited your validator key, it's time to deposit your keyshares!
+Once you have successfully deposited your **validator key**, it's time to deposit your **keyshares**!
 
 `yarn hardhat run scripts/depositKeyshares.js --network localhost`
 
