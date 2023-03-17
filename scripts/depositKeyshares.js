@@ -13,7 +13,7 @@ async function depositKeyshares() {
   const chainId = await getChainId();
   //console.log("chainId:", chainId);
   const stakingPool = await ethers.getContract("StakingPoolV1");
-  //console.log("stakingPool:", stakingPool.address);
+  console.log("stakingPool:", stakingPool.address);
   // const abi = fs.readFile("./abi/StakingPoolV1.json", function (err, data) {
   //   console.log(data);
   // });
@@ -40,8 +40,13 @@ async function depositKeyshares() {
   // console.log(payload.sharePrivateKey);
   // console.log(payload.ssvAmount);
   //console.log("keyshares length:", keyshares.length);
+
+  const depositContractAddress = await stakingPool.viewDepositContractAddress();
+  console.log("depositContractAddress:", depositContractAddress);
+
   const opIds = payload.operatorIds.split(",");
   console.log(opIds);
+  console.log(await stakingPool.owner());
   const tx = await stakingPool.depositShares(
     payload.validatorPublicKey,
     opIds,
@@ -49,11 +54,11 @@ async function depositKeyshares() {
     payload.sharePrivateKey,
     payload.ssvAmount
   );
-  const txReceipt = await tx.wait(1);
-  console.log(txReceipt.events);
-  if (txReceipt.events[1].event.includes("KeySharesDeposited")) {
-    console.log(true);
-  }
+  //const txReceipt = await tx.wait(1);
+  //console.log(txReceipt.events);
+  // if (txReceipt.events[1].event.includes("KeySharesDeposited")) {
+  //   console.log(true);
+  // }
 }
 
 depositKeyshares()

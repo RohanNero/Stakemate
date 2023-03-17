@@ -11,7 +11,6 @@ const networkConfig = {
   31337: {
     name: "localhost",
     operatorIds: [1, 2, 9, 42],
-    SSVNetwork: "0x3D776231fE7EE264c89a9B09647ACFD955cD1d9b",
     stakeValue: "32010000000000000000", // 32.01 ETH
     blockConfirmations: 1,
     networkInitialization: {

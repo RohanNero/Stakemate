@@ -33,7 +33,7 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
     });
 
     // SSVRegistry
-    const SSVRegistry = await deploy("SSVRegistry", {
+    const SSVRegistry = await deploy("SSVRegistryMock", {
       from: deployer,
       log: true,
       args: [],
@@ -43,19 +43,19 @@ module.exports = async ({ deployments, getNamedAccounts, getChainId }) => {
      *size exceeds size limit (30 KiB)
      * must have optimizer enabled
      * creating a SSVNetworkMock contract for local work */
-    const SSVNetwork = await deploy("SSVNetwork", {
-      from: deployer,
-      log: true,
-      args: [],
-    });
-
-    /* Mock SSVNetwork
-     * depreciated but left in incase you wish to use Mock instead*/
-    // const SSVNetwork = await deploy("SSVNetworkMock", {
+    // const SSVNetwork = await deploy("SSVNetwork", {
     //   from: deployer,
     //   log: true,
     //   args: [],
     // });
+
+    /* Mock SSVNetwork
+     * depreciated but left in incase you wish to use Mock instead*/
+    const SSVNetwork = await deploy("SSVNetworkMock", {
+      from: deployer,
+      log: true,
+      args: [],
+    });
 
     /* Mock SSVETH
      * this gets deployed inside (Liquid)StakingPool constructor */
