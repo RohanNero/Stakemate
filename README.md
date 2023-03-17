@@ -58,7 +58,7 @@ Once you've generated **validator keys**, you're ready to **update your `keys/co
 
 Congratulations! You have now generated both **validator keys** and **SSV keyshares** from the command line!
 
-### :guard: Deploying locally
+### :seedling: Deploying locally
 
 _you must be in the root directory, either run `cd ..` or open a new terminal_
 
@@ -70,7 +70,7 @@ Alternatively you can pass your api key directly when starting the blockchain li
 
 Once your local blockchain is up and running, **open a new terminal** and you can now run some scripts!
 
-### Running scripts
+### :rosette: Running scripts
 
 Try out staking and unstaking to the **StakingPoolV1** contract with these commands:
 
@@ -78,7 +78,7 @@ Try out staking and unstaking to the **StakingPoolV1** contract with these comma
 
 `yarn hardhat run scripts/V1/unstake.js --network localhost`
 
-#### Depositing keys
+#### :four_leaf_clover: Depositing keys
 
 First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command
 
@@ -92,7 +92,7 @@ Once you have successfully deposited your validator key, it's time to deposit yo
 
 Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
 
-### Deploying to a testnet
+### :sunflower: Deploying to a testnet
 
 For example:
 
@@ -104,15 +104,15 @@ From this point you can run your scripts like you did before but this time pass 
 
 `yarn hardhat run scripts/stake.js --network goerli`
 
-### Deployed contract addresses:
+### :maple_leaf: Deployed contract addresses:
 
-#### Goerli testnet
+#### :white_flower: Goerli testnet
 
 - [StakingPoolV1](https://goerli.etherscan.io/address/0xB25A33CbA69460A1C7c0E432abAb9562b8e84bFE#code)
 - [LiquidStakingPoolV1](https://goerli.etherscan.io/address/0x2078Fe17Fd0B1b0C4b504d30CA8713Cd729CcB28#code)
 - [StakingFactoryV1](https://goerli.etherscan.io/address/0x7a5CDE8859372C056DDd0fB900F5D251a48C6850#code)
 
-#### Sepolia testnet
+#### :blossom: Sepolia testnet
 
 _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 
