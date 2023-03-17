@@ -15,12 +15,19 @@ async function initialize() {
   if (chainId.toString() == "31337") {
     network = await ethers.getContract("SSVNetworkMock");
     registry = await ethers.getContract("SSVRegistryMock");
-  } else {
-    network = await ethers.getContract("SSVNetwork");
-    registry = await ethers.getContract("SSVRegistry");
-  }
+    const token = await ethers.getContract("SSVToken");
+    const setRegistry = await network.setRegistryContract(registry.address);
+    const setToken = await network.setTokenAddress(token.address);
+    const owner = await registry.owner();
+    console.log(owner);
+    const transferOwner = await registry.transferOwnership(network.address);
+    const newOwner = await registry.owner();
+    console.log(newOwner);
+  } // else {
+  //   network = await ethers.getContract("SSVNetwork");
+  //   registry = await ethers.getContract("SSVRegistry");
+  // }
 
-  const token = await ethers.getContract("SSVToken");
   // this is a proxy contracts' "constructor", unsure on the specifics
   // await network.initialize(
   //   registry.address,
@@ -30,13 +37,7 @@ async function initialize() {
   //   networkConfig[chainId].networkInitialization.declareOperatorFeePeriod,
   //   networkConfig[chainId].networkInitialization.executeOperatorFeePeriod
   // );
-  const setRegistry = await network.setRegistryContract(registry.address);
-  const setToken = await network.setTokenAddress(token.address);
-  const owner = await registry.owner();
-  console.log(owner);
-  const transferOwner = await registry.transferOwnership(network.address);
-  const newOwner = await registry.owner();
-  console.log(newOwner);
+
   //console.log("values:", setRegistry, setToken);
 }
 
