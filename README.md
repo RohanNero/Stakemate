@@ -2,7 +2,7 @@
 
 Powered by the SSV network
 
-## Initial setup
+## :mage: Initial setup
 
 first **clone** into the repo
 
@@ -18,7 +18,7 @@ first **clone** into the repo
 
 Now input your information into a `.env` file using the `.env.example` file as an example format
 
-Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry this next section will provide you with everything you need to generate your own keys
+Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry, this next section will provide you with everything you need to generate your own keys
 
 ### Generating Keys
 
