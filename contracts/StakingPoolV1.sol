@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IDepositContract.sol";
 import "./interfaces/ISSVNetwork.sol";
-import "hardhat/console.sol";
 
 error StakingPool__AtleastFourOperators(uint idsLength);
 error StakingPool__CantStakeZeroWei();
@@ -148,19 +147,19 @@ contract StakingPoolV1 is Ownable, ReentrancyGuard {
         bytes[] calldata encryptedKeys,
         uint256 amount
     ) external onlyOwner {
-        // if (publicKey.length != 48) {
-        //     revert StakingPool__InvalidPublicKeyLength(publicKey.length);
-        // }
-        // if (_operatorIds.length < 4 ) {
-        //     revert StakingPool__AtleastFourOperators(_operatorIds.length);
-        // }
-        // if (
-        //     _operatorIds.length != sharesPublicKeys.length ||
-        //     _operatorIds.length != encryptedKeys.length
+        if (publicKey.length != 48) {
+            revert StakingPool__InvalidPublicKeyLength(publicKey.length);
+        }
+        if (_operatorIds.length < 4 ) {
+            revert StakingPool__AtleastFourOperators(_operatorIds.length);
+        }
+        if (
+            _operatorIds.length != sharesPublicKeys.length ||
+            _operatorIds.length != encryptedKeys.length
             
-        // ) {
-        //     revert StakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
-        // }
+        ) {
+            revert StakingPool__InputLengthsMustMatch(_operatorIds.length, sharesPublicKeys.length, encryptedKeys.length);
+        }
         token.approve(address(network), amount);
         network.registerValidator(
             publicKey,
