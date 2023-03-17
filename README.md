@@ -58,7 +58,7 @@ Once you've generated **validator keys**, you're ready to **update your `keys/co
 
 Congratulations! You have now generated both **validator keys** and **SSV keyshares** from the command line!
 
-### :seedling: Deploying locally
+### :hibiscus: Deploying locally
 
 _you must be in the root directory, either run `cd ..` or open a new terminal_
 
@@ -78,7 +78,7 @@ Try out staking and unstaking to the **StakingPoolV1** contract with these comma
 
 `yarn hardhat run scripts/V1/unstake.js --network localhost`
 
-#### :four_leaf_clover: Depositing keys
+#### :rose: Depositing keys
 
 First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command
 
