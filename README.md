@@ -2,7 +2,7 @@
 
 Powered by the SSV network
 
-## :white_flower: Initial setup
+## :hibiscus: Initial setup
 
 first **clone** into the repo
 
@@ -20,7 +20,7 @@ Now input your information into a `.env` file using the `.env.example` file as a
 
 Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry, this next section will provide you with everything you need to generate your own keys
 
-### :rosette: Generating Keys
+### :white_flower: Generating Keys
 
 Before we can split our **validator key**, we will obviously need to create some! So for now, we'll be using implemented scripts from the [staking-deposit-cli](https://github.com/ethereum/staking-deposit-cli). These scripts are written in **Python** so you will need to have atleast version 3.8 installed, if you don't currently have it, then you can get the latest version [here](https://www.python.org/downloads/).
 
@@ -58,7 +58,7 @@ Once you've generated **validator keys**, you're ready to **update your `keys/co
 
 Congratulations! You have now generated both **validator keys** and **SSV keyshares** from the command line!
 
-### :hibiscus: Deploying locally
+### :rosette: Deploying locally
 
 _you must be in the root directory, either run `cd ..` or open a new terminal_
 
