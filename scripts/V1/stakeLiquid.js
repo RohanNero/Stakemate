@@ -11,12 +11,26 @@ async function stake() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
-  const StakingPool = await ethers.getContract("LiquidStakingPoolV1");
-  console.log("stakingPool:", StakingPool.address);
-  await StakingPool.stake({ value: stakeValue });
-  console.log("Successfully staked", stakeValue, "WEI!");
-  const totalStaked = await StakingPool.viewUserStake(deployer);
-  console.log("Bringing your total staked to:", totalStaked.toString(), "WEI!");
+  try {
+    const StakingPool = await ethers.getContract("LiquidStakingPoolV1");
+    console.log("stakingPool:", StakingPool.address);
+    await StakingPool.stake({ value: stakeValue });
+    console.log("Successfully staked", stakeValue, "WEI!");
+    const totalStaked = await StakingPool.viewUserStake(deployer);
+    console.log(
+      "Bringing your total staked to:",
+      totalStaked.toString(),
+      "WEI!"
+    );
+  } catch (error) {
+    console.log(error);
+    console.log(
+      "---------------------------------------------------------------------------------------------"
+    );
+    console.log(
+      "if you are trying to use the hardhat local blockchain you need to pass `--network localhost` "
+    );
+  }
 }
 
 stake()
