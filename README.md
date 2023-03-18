@@ -100,7 +100,7 @@ Once you have successfully deposited your **validator key**, it's time to deposi
 
 `yarn hardhat run scripts/V1/depositKeyshares.js --network localhost`
 
-or to run the liquid version
+or the **LiquidStakingPoolV1** version
 
 `yarn hardhat run scripts/V1/depositKeysharesLiquid.js --network localhost`
 
