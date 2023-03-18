@@ -2,9 +2,8 @@ const { ethers, network, deployments } = require("hardhat");
 const {
   networkConfig,
   developmentChains,
-} = require("../helper-hardhat-config.js");
+} = require("../../helper-hardhat-config.js");
 const fs = require("fs-extra");
-process.env.NODE_NO_WARNINGS = "stream/web";
 
 /** this function deposits validator keys for most recently deployed contracts on the chosen network
  * the payload is taken from the last file in your keys/keyshares/ folder

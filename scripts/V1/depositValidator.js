@@ -2,7 +2,7 @@ const { ethers, network, deployments } = require("hardhat");
 const {
   networkConfig,
   developmentChains,
-} = require("../helper-hardhat-config.js");
+} = require("../../helper-hardhat-config.js");
 const fs = require("fs-extra");
 
 /** this function deposits validator keys for specified contract address and config file
@@ -35,23 +35,31 @@ async function depositValidator() {
   //console.log(depositData);
   //console.log("depositData length:", depositData.length);
   for (let i = 0; i < depositData.length; i++) {
-    // const args = [
-    //   depositData[i].pubkey,
-    //   depositData[i].withdrawal_credentials,
-    //   depositData[i].signature,
-    //   depositData[i].deposit_data_root,
-    // ];
-    // console.log(args);
-    const tx = await stakingPool.depositValidator(
-      "0x" + depositData[i].pubkey,
-      "0x" + depositData[i].withdrawal_credentials,
-      "0x" + depositData[i].signature,
-      "0x" + depositData[i].deposit_data_root
-    );
-    const txReceipt = await tx.wait(1);
-    //console.log(txReceipt.events[1].event);
-    if (txReceipt.events[1].event.includes("PublicKeyDeposited")) {
-      console.log("The public key", depositData[i].pubkey, "was deposited!");
+    try {
+      // const args = [
+      //   depositData[i].pubkey,
+      //   depositData[i].withdrawal_credentials,
+      //   depositData[i].signature,
+      //   depositData[i].deposit_data_root,
+      // ];
+      // console.log(args);
+      const tx = await stakingPool.depositValidator(
+        "0x" + depositData[i].pubkey,
+        "0x" + depositData[i].withdrawal_credentials,
+        "0x" + depositData[i].signature,
+        "0x" + depositData[i].deposit_data_root
+      );
+      const txReceipt = await tx.wait(1);
+      //console.log(txReceipt.events[1].event);
+      if (txReceipt.events[1].event.includes("PublicKeyDeposited")) {
+        console.log("The public key", depositData[i].pubkey, "was deposited!");
+      }
+    } catch (error) {
+      if (error.message.includes("InsufficientEtherBalance")) {
+        console.log("You must stake atleast 32 Ether first!");
+      } else {
+        console.log(error);
+      }
     }
   }
 }

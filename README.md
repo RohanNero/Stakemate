@@ -78,17 +78,31 @@ Try out staking and unstaking to the **StakingPoolV1** contract with these comma
 
 `yarn hardhat run scripts/V1/unstake.js --network localhost`
 
+to stake to the **LiquidStakingPoolV1** contract you can run these commands:
+
+`yarn hardhat run scripts/V1/stakeLiquid.js --network localhost`
+
+`yarn hardhat run scripts/V1/unstakeLiquid.js --network localhost`
+
 #### 🌹 Depositing keys
 
-First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command
+First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command for **StakingPoolV1**
 
-`yarn hardhat run scripts/depositValidatorPool.js --network localhost`
+`yarn hardhat run scripts/V1/depositValidator.js --network localhost`
+
+and this one for **LiquidStakingPoolV1**
+
+`yarn hardhat run scripts/V1/depositValidatorLiquid.js --network localhost`
 
 _If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
 
 Once you have successfully deposited your **validator key**, it's time to deposit your **keyshares**!
 
-`yarn hardhat run scripts/depositKeyshares.js --network localhost`
+`yarn hardhat run scripts/V1/depositKeyshares.js --network localhost`
+
+or
+
+`yarn hardhat run scripts/V1/depositKeysharesLiquid.js --network localhost`
 
 Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
 
