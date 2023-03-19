@@ -134,7 +134,7 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 - [LiquidStakingPoolV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 - [StakingFactoryV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 
-## Using the frontend
+## 🐝 Using the frontend
 
 To get started using the frontend locally lets cd into the **frontend** folder
 
