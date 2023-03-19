@@ -134,6 +134,18 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 - [LiquidStakingPoolV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 - [StakingFactoryV1](https://github.com/RohanNero/hardhat-dvt-staking#deployed-contract-addresses)
 
+## Using the frontend
+
+To get started using the frontend locally lets cd into the **frontend** folder
+
+`cd frontend`
+
+and then lets start the development server
+
+`yarn dev`
+
+now you can open http://localhost:3000 to interact with it
+
 ## 💐 Helpful links & sources
 
 - [Goerli SSVToken on etherscan](https://goerli.etherscan.io/address/0x3a9f01091c446bde031e39ea8354647afef091e7)
