@@ -11,15 +11,37 @@ async function stake() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
-  const StakingPool = await ethers.getContract("StakingPoolV1");
-  //console.log("stakingPool:", StakingPool.address);
-  const tx = await StakingPool.stake({ value: stakeValue });
-  console.log("Successfully staked", stakeValue, "WEI!");
-  const totalStaked = await StakingPool.viewUserStake(deployer);
-  if (!developmentChains.includes(network.name)) {
-    await tx.wait(1);
+  try {
+    const StakingPool = await ethers.getContract("StakingPoolV1");
+    //console.log("stakingPool:", StakingPool.address);
+
+    const tx = await StakingPool.stake({ value: stakeValue });
+    console.log("Successfully staked", stakeValue, "WEI!");
+    const totalStaked = await StakingPool.viewUserStake(deployer);
+    if (!developmentChains.includes(network.name)) {
+      await tx.wait(1);
+    }
+    console.log(
+      "Bringing your total staked to:",
+      totalStaked.toString(),
+      "WEI!"
+    );
+  } catch (error) {
+    if (network.name == "hardhat") {
+      console.log(
+        "---------------------------------------------------------------------------------------------"
+      );
+      console.log(
+        "If you are trying to use the hardhat local blockchain you need to pass `--network localhost` "
+      );
+      console.log(
+        "---------------------------------------------------------------------------------------------"
+      );
+      throw error;
+    } else {
+      throw error;
+    }
   }
-  console.log("Bringing your total staked to:", totalStaked.toString(), "WEI!");
 }
 
 stake()

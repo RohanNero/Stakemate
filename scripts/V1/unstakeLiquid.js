@@ -11,28 +11,43 @@ async function unStake() {
   const stakeValue = networkConfig[chainId].stakeValue;
   //console.log(stakeValue);
   //console.log(deployer);
-  const StakingPool = await ethers.getContract("LiquidStakingPoolV1");
-  const StakingPoolssvEthAddress = await StakingPool.ssvETH();
-  //console.log("ssvEth:", StakingPoolssvEthAddress);
-  const SSVETH = await ethers.getContractAt(
-    "SSVETH",
-    StakingPoolssvEthAddress.toString()
-  );
-  //console.log(SSVETH);
-  const userStake = await StakingPool.viewUserStake(deployer);
-  //console.log("userStake:", userStake.toString());
-  const SSVETHBalance = await SSVETH.balanceOf(deployer);
-  //console.log("SSVETHBalance:", SSVETHBalance.toString());
+  try {
+    const StakingPool = await ethers.getContract("LiquidStakingPoolV1");
+    const StakingPoolssvEthAddress = await StakingPool.viewSSVETHAddress();
+    //console.log("ssvEth:", StakingPoolssvEthAddress);
+    const SSVETH = await ethers.getContractAt(
+      "SSVETH",
+      StakingPoolssvEthAddress.toString()
+    );
+    //console.log(SSVETH);
+    const userStake = await StakingPool.viewUserStake(deployer);
+    //console.log("userStake:", userStake.toString());
+    const SSVETHBalance = await SSVETH.balanceOf(deployer);
+    //console.log("SSVETHBalance:", SSVETHBalance.toString());
 
-  await SSVETH.approve(StakingPool.address, SSVETHBalance);
-  await StakingPool.unstake(userStake);
-  console.log("Successfully unStaked", userStake.toString(), "WEI!");
+    await SSVETH.approve(StakingPool.address, SSVETHBalance);
+    await StakingPool.unstake(userStake);
+    console.log("Successfully unStaked", userStake.toString(), "WEI!");
 
-  const stillStaked = await StakingPool.viewUserStake(deployer);
-  console.log("You now have", stillStaked.toString(), "still staked!");
+    const stillStaked = await StakingPool.viewUserStake(deployer);
+    console.log("You now have", stillStaked.toString(), "still staked!");
 
-  //const owner = await StakingPool.owner();
-  //console.log("owner:", owner);
+    //const owner = await StakingPool.owner();
+    //console.log("owner:", owner);
+  } catch (error) {
+    if (network.name == "hardhat") {
+      console.log(
+        "---------------------------------------------------------------------------------------------"
+      );
+      console.log(
+        "If you are trying to use the hardhat local blockchain you need to pass `--network localhost` "
+      );
+      console.log(
+        "---------------------------------------------------------------------------------------------"
+      );
+    }
+    console.log(error);
+  }
 }
 
 unStake()
