@@ -12,7 +12,7 @@ async function stake() {
   //console.log("stakeValue:", stakeValue);
   //console.log("chainId:", chainId);
   try {
-    const StakingFactory = await ethers.getContract("StakingFactoryV1");
+    const stakingFactory = await ethers.getContract("StakingFactoryV1");
     console.log("stakingFactory:", stakingFactory.address);
     let depositContract, SSVNetwork, SSVToken, opIds;
     if (developmentChains.includes(network.name)) {
@@ -32,21 +32,16 @@ async function stake() {
       opIds = networkConfig[chainId].operatorIds;
       //log(opIds);
     }
-    const tx = await StakingFactory.createStakingPool(
+    const tx = await stakingFactory.createStakingPool(
       depositContract,
       SSVNetwork,
       SSVToken,
       opIds
     );
-    console.log(await tx.wait(1));
+    console.log(await tx.wait());
     if (!developmentChains.includes(network.name)) {
       await tx.wait(1);
     }
-    console.log(
-      "Bringing your total staked to:",
-      totalStaked.toString(),
-      "WEI!"
-    );
   } catch (error) {
     if (network.name == "hardhat") {
       console.log(
