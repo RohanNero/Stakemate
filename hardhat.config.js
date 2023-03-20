@@ -22,26 +22,67 @@ const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 /** This task allows users to stake a specified amount to a specific address */
 task("stake", "stake an ether amount")
   .addParam("address", "which staking pool contract address to use")
-  .addParam("amount", "amount to stake in WEI")
+  .addOptionalParam("amount", "amount to stake in WEI")
   .addOptionalParam(
     "liquid",
     "bool that if set true will use the Liquid version of the staking pool"
   )
   .setAction(async (taskArgs) => {
-    //const balance = await ethers.provider.getBalance(taskArgs.account);
-    let stakingPool;
-    if (taskArgs.liquid) {
-      stakingPool = await ethers.getContractAt(
-        "LiquidStakingPoolV1",
-        taskArgs.address
+    try {
+      const {
+        networkConfig,
+        developmentChains,
+      } = require("./helper-hardhat-config.js");
+      const { deployer } = await getNamedAccounts();
+      const chainId = await getChainId();
+      let stakingPool, stakingValue;
+      if (taskArgs.liquid) {
+        stakingPool = await ethers.getContractAt(
+          "LiquidStakingPoolV1",
+          taskArgs.address
+        );
+        //console.log(stakingPool);
+      } else {
+        stakingPool = await ethers.getContractAt(
+          "StakingPoolV1",
+          taskArgs.address
+        );
+        //console.log(stakingPool);
+      }
+
+      if (taskArgs.amount) {
+        stakeValue = taskArgs.amount;
+      } else {
+        stakeValue = networkConfig[chainId].stakeValue;
+      }
+
+      const tx = await stakingPool.stake({ value: stakeValue });
+      console.log("Successfully staked", stakeValue, "WEI!");
+      //console.log("deployer:", deployer);
+      const totalStaked = await stakingPool.viewUserStake(deployer);
+      if (!developmentChains.includes(network.name)) {
+        await tx.wait(1);
+      }
+      console.log(
+        "Bringing your total staked to:",
+        totalStaked.toString(),
+        "WEI!"
       );
-      //console.log(stakingPool);
-    } else {
-      stakingPool = await ethers.getContractAt(
-        "StakingPoolV1",
-        taskArgs.address
-      );
-      //console.log(stakingPool);
+    } catch (error) {
+      if (network.name == "hardhat") {
+        console.log(
+          "---------------------------------------------------------------------------------------------"
+        );
+        console.log(
+          "If you are trying to use the hardhat local blockchain you need to pass `--network localhost` "
+        );
+        console.log(
+          "---------------------------------------------------------------------------------------------"
+        );
+        throw error;
+      } else {
+        throw error;
+      }
     }
   });
 /** This task allows users to unstake a specified amount to a specific address */
