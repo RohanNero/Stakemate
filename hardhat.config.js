@@ -19,13 +19,34 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const SNOWTRACE_API_KEY = process.env.SNOWTRACE_API_KEY;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 
-// task("deposit-keyshares", "deposits keyshare payload to SSVNetwork contract")
-//   .addParam("address", "which c")
-//   .setAction(async (taskArgs) => {
-//     const balance = await ethers.provider.getBalance(taskArgs.account);
-
-//     console.log(ethers.utils.formatEther(balance), "ETH");
-//   });
+task("deposit-keyshares", "deposits keyshare payload to SSVNetwork contract")
+  .addParam("address", "which staking pool contract address to use")
+  .addOptionalParam(
+    "liquid",
+    "bool that if set true will use the Liquid version of the staking pool"
+  )
+  .addOptionalParam(
+    "keysharesFile",
+    "if a file name is given then only keyshares for that file are deposited"
+  )
+  .setAction(async (taskArgs) => {
+    //const balance = await ethers.provider.getBalance(taskArgs.account);
+    let stakingPool;
+    if (taskArgs.liquid) {
+      stakingPool = await ethers.getContractAt(
+        "LiquidStakingPoolV1",
+        taskArgs.address
+      );
+      //console.log(stakingPool);
+    } else {
+      stakingPool = await ethers.getContractAt(
+        "StakingPoolV1",
+        taskArgs.address
+      );
+      //console.log(stakingPool);
+    }
+    //console.log(ethers.utils.formatEther(balance), "ETH");
+  });
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {

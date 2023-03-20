@@ -13,7 +13,7 @@ async function stake() {
   //console.log("chainId:", chainId);
   try {
     const StakingPool = await ethers.getContract("StakingPoolV1");
-    //console.log("stakingPool:", StakingPool.address);
+    console.log("stakingPool:", StakingPool.address);
 
     const tx = await StakingPool.stake({ value: stakeValue });
     console.log("Successfully staked", stakeValue, "WEI!");
