@@ -88,26 +88,76 @@ task("stake", "stake an ether amount")
 /** This task allows users to unstake a specified amount to a specific address */
 task("unstake", "unstake an ether amount")
   .addParam("address", "which staking pool contract address to use")
-  .addParam("amount", "amount to stake in WEI")
+  .addOptionalParam("amount", "amount to stake in WEI")
   .addOptionalParam(
     "liquid",
     "bool that if set true will use the Liquid version of the staking pool"
   )
   .setAction(async (taskArgs) => {
-    //const balance = await ethers.provider.getBalance(taskArgs.account);
-    let stakingPool;
-    if (taskArgs.liquid) {
-      stakingPool = await ethers.getContractAt(
-        "LiquidStakingPoolV1",
-        taskArgs.address
-      );
-      //console.log(stakingPool);
-    } else {
-      stakingPool = await ethers.getContractAt(
-        "StakingPoolV1",
-        taskArgs.address
-      );
-      //console.log(stakingPool);
+    try {
+      const {
+        networkConfig,
+        developmentChains,
+      } = require("./helper-hardhat-config.js");
+      const { deployer } = await getNamedAccounts();
+      const chainId = await getChainId();
+      let stakingPool, stakingValue, stake;
+      if (taskArgs.liquid) {
+        stakingPool = await ethers.getContractAt(
+          "LiquidStakingPoolV1",
+          taskArgs.address
+        );
+        const StakingPoolssvEthAddress = await stakingPool.viewSSVETHAddress();
+        //console.log("ssvEth:", StakingPoolssvEthAddress);
+        const SSVETH = await ethers.getContractAt(
+          "SSVETH",
+          StakingPoolssvEthAddress.toString()
+        );
+        await SSVETH.approve(stakingPool.address, SSVETHBalance);
+        //console.log(stakingPool);
+      } else {
+        stakingPool = await ethers.getContractAt(
+          "StakingPoolV1",
+          taskArgs.address
+        );
+        //console.log(stakingPool);
+      }
+
+      if (taskArgs.amount) {
+        stakeValue = taskArgs.amount;
+      } else {
+        stakeValue = networkConfig[chainId].stakeValue;
+      }
+
+      stake = await stakingPool.viewUserStake(deployer);
+
+      await stakingPool.unstake(stakeValue);
+      console.log("Successfully unStaked", stakeValue.toString(), "WEI!");
+
+      const stillStaked = await stakingPool.viewUserStake(deployer);
+      console.log("You now have", stillStaked.toString(), "still staked!");
+      if (!developmentChains.includes(network.name)) {
+        await tx.wait(1);
+      }
+    } catch (error) {
+      if (network.name == "hardhat") {
+        console.log(
+          "---------------------------------------------------------------------------------------------"
+        );
+        console.log(
+          "If you are trying to use the hardhat local blockchain you need to pass `--network localhost` "
+        );
+        console.log(
+          "---------------------------------------------------------------------------------------------"
+        );
+        throw error;
+      } else if (error.message.includes("NotEnoughStaked")) {
+        console.log("ERROR: Not enough staked!");
+        console.log("Amount staked:", stake);
+        console.log("Tried to unstake:", stakeValue);
+      } else {
+        throw error;
+      }
     }
   });
 
