@@ -5,6 +5,7 @@ cache
 yarn.lock
 yarn-error.log
 notes.md
+legacyNotes.md
 bugs.md
 deployments/*
 __pycache__
