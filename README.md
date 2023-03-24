@@ -1,6 +1,7 @@
 # 🧙 Staking DVT
 
 Powered by the SSV network
+_Notice: this repo is still a work in progress and should not be taken to mainnet in its current state._
 
 ## 🌺 Initial setup
 
