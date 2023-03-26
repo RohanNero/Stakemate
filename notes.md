@@ -66,7 +66,7 @@
   - need to finish creation scripts on factory
 
 - plan atm
-  - write a shit ton of tests
+  - write plenty of tests
   - work on frontend
   - create V2 contracts and scripts
 
@@ -76,3 +76,4 @@
 
 - this brings the current suit to 3 V1 variations with 1 V1 contract Factory.
   - V2 is only added for format/structure
+    s
