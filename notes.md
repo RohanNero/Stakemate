@@ -69,3 +69,10 @@
   - write a shit ton of tests
   - work on frontend
   - create V2 contracts and scripts
+
+## Additional plans
+
+- I propose a new `SafeStakingPoolV1` contract that comes with immutable values so that even if the owner is malicious, they can't affect users' stake. Also functions that are open to public after conditions are met.
+
+- this brings the current suit to 3 V1 variations with 1 V1 contract Factory.
+  - V2 is only added for format/structure
