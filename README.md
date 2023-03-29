@@ -138,7 +138,7 @@ _Currently unavaliable since SSV Network contracts are only deployed on goerli_
 
 ## 🐝 Using the frontend
 
-To get started using the frontend locally lets cd into the **frontend** folder
+To get started using the frontend locally lets `cd` into the **frontend** folder
 
 `cd frontend`
 
