@@ -1,5 +1,7 @@
 ## V2 upgrades
 
+**Major difference between `V1` and `V2` contracts is that `V2` come with built-in multi sigs**
+
 ### Managing unstaking
 
 #### Notice: the straightforward solution would be to have pools of currency that are used to temporarily fill `unstake()` orders that fall below the **32 ETH** threshold, however I want to explore other options that don't require having an initial supply of capital.
@@ -11,8 +13,6 @@
   - if a user tries to **stake** an amount that is greater than the oldest proposed **stake**, that `proposedUnstake` will be completely fulfilled, and then the next oldest `proposedUnstake` will get any remaining value.
   - _(if the stake is more than that `proposedUnstake` the cycle continues until the **stake** amount is finished, any remaining after that will be staked like normal)_
   - _(propose stake diversions will be on a first come first serve basis)_
-
-### Managing withdrawals
 
 ### Managing rewards
 
@@ -47,6 +47,8 @@
   - need to add function to add _validatorKey_ && emit _PublicKeyDeposited_ event if the owner has interacted with DepositContract directly.
     - will call a view function on depositContract as proof that StakingPool owner owns the key
 
+### Scripts and tasks
+
 - alternative to scripts = tasks
   - these will be advanced scripts with parameters such as a contract address or config file name
   - this way users can also choose what amount and contract to stake/unstake to/from.
@@ -65,15 +67,26 @@
 
   - need to finish creation scripts on factory
 
-- plan atm
-  - write plenty of tests
-  - work on frontend
-  - create V2 contracts and scripts
+### plan currently:
 
-## Additional plans
+1. develop new and improved smart contract logic, not only for V2 contracts, but for an additional new V1 as well as the original V1 contracts.
+
+   - test `depositValidator` using `Validator` struct variables instead of input parameters
+
+2. write new scripts for upgraded contract
+3. write plenty of tests
+4. work on frontend
+5. create documentation && quickstart guide.
+
+### Additional plans
 
 - I propose a new `SafeStakingPoolV1` contract that comes with immutable values so that even if the owner is malicious, they can't affect users' stake. Also functions that are open to public after conditions are met.
 
 - this brings the current suit to 3 V1 variations with 1 V1 contract Factory.
   - V2 is only added for format/structure
-    s
+
+### Additional thoughts
+
+- will 32 ETH plus rewards be withdrawable or will it be two seperate withdrawals, one for rewards and one to deactivate validator.
+  - regardless, we need to be able to populate the `Validator` struct with the correct `uint rewards` value
+  - unstaking/user withdrawals will rely on this variable

@@ -1,4 +1,4 @@
-# 🧙 Staking DVT
+# 🧙 Stakemate
 
 Powered by the SSV network
 
