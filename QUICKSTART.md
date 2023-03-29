@@ -92,4 +92,4 @@ Once you have successfully deposited your **validator key**, it's time to deposi
 14. `yarn hardhat run scripts/V1/depositKeyshares.js --network localhost`
 
 Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
-[README](https://github.com/RohanNero/Stakemate/blob/master/README.md)
+[README](README.md)
