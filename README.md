@@ -8,7 +8,7 @@ Powered by the SSV network
 
 first **clone** into the repo
 
-`git clone https://github.com/RohanNero/hardhat-dvt-staking`
+`git clone https://github.com/RohanNero/Stakemate`
 
 **install** the dependencies
 
