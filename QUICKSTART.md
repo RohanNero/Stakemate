@@ -6,7 +6,7 @@ Powered by the SSV network
 
 first **clone** into the repo
 
-1. `git clone https://github.com/RohanNero/hardhat-dvt-staking`
+1. `git clone https://github.com/RohanNero/Stakemate`
 
 **install** the dependencies
 
@@ -17,9 +17,7 @@ first **clone** into the repo
 Now input your information into a `.env` file using the `.env.example` file as an example format
 (you should only need to update the RPC endpoints, the private keys are default for the hardhat network)
 
-**compile** the contracts
-
-3. `yarn hardhat compile`
+3. `mv .env.example .env`
 
 Now if you already have **validator keys** and **keyshares**, you can skip this next section and [begin deploying](#deploying-locally). If not then don't worry, this next section will provide you with everything you need to generate your own keys
 
@@ -42,10 +40,6 @@ First thing we should do is setup the [SSV Key Distributer CLI](https://docs.ssv
 and install some additional dependencies
 
 7. `pip install -r requirements.txt`
-
-To see what command line options are supported you can run
-
-`python3 main.py -h` / `--help`
 
 **🍄 But before we can call any functions**, we first have to set our `keys/config` file variables to our desired values
 
@@ -83,46 +77,19 @@ Once your local blockchain is up and running, **open a new terminal** and you ca
 
 Try out staking and unstaking to the **StakingPoolV1** contract with these commands:
 
-`yarn hardhat run scripts/V1/stake.js --network localhost`
-
-`yarn hardhat run scripts/V1/unstake.js --network localhost`
-
-to stake to the **LiquidStakingPoolV1** contract you can run these commands:
-
-`yarn hardhat run scripts/V1/stakeLiquid.js --network localhost`
-
-`yarn hardhat run scripts/V1/unstakeLiquid.js --network localhost`
+12. `yarn hardhat run scripts/V1/stake.js --network localhost`
 
 #### 🌹 Depositing keys
 
 First lets deposit your **validator key** and send 32 ETH to the **deposit contract** with this command for **StakingPoolV1**
 
-12. `yarn hardhat run scripts/V1/depositValidator.js --network localhost`
-
-and this one for **LiquidStakingPoolV1**
-
-`yarn hardhat run scripts/V1/depositValidatorLiquid.js --network localhost`
+13. `yarn hardhat run scripts/V1/depositValidator.js --network localhost`
 
 _If you try to run this script without having atleast 32 ETH in the contract it will throw an error_
 
 Once you have successfully deposited your **validator key**, it's time to deposit your **keyshares**!
 
-13. `yarn hardhat run scripts/V1/depositKeyshares.js --network localhost`
-
-or the **LiquidStakingPoolV1** version
-
-`yarn hardhat run scripts/V1/depositKeysharesLiquid.js --network localhost`
+14. `yarn hardhat run scripts/V1/depositKeyshares.js --network localhost`
 
 Whenever you're ready to take things to the next step, lets deploy on **Goerli testnet!**
-
-### 🌻 Deploying to a testnet
-
-For example:
-
-`yarn hardhat deploy --network goerli`
-
-The command line should return you your new contract addresses so you can view them on a block explorer
-
-From this point you can run your scripts like you did before but this time pass the corresponding network's name as an argument:
-
-`yarn hardhat run scripts/stake.js --network goerli`
+[README](https://github.com/RohanNero/Stakemate/blob/master/README.md)
