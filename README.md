@@ -150,6 +150,8 @@ now you can open http://localhost:3000 to interact with it
 
 ## 💐 Helpful links & sources
 
+Huge Credit to [@Marko](https://github.com/markoinether) for building [awesome-ssv](https://github.com/bloxapp/awesome-ssv)
+
 - [Goerli SSVToken on etherscan](https://goerli.etherscan.io/address/0x3a9f01091c446bde031e39ea8354647afef091e7)
 - [Goerli SSV faucet](https://faucet.ssv.network/)
 - [Mainnet validator deposit contract](https://etherscan.io/address/0x00000000219ab540356cBB839Cbe05303d7705Fa)
